@@ -7,6 +7,7 @@ import Myspace from "./dashboard/Myspace";
 import Dashboard from "./dashboard/Home";
 import { UserAuthContextProvider } from './context/UserAuthContext';
 import ProtectedRoute from './auth/ProtectedRoute';
+import Overview from './dashboard/Overview';
 import Profile from './dashboard/Profile';
 
 function Main() {
@@ -22,6 +23,7 @@ function Main() {
 					<Route path='home' element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />
 					<Route path='myspace' element={<ProtectedRoute><Myspace/></ProtectedRoute>} />
 					<Route path='profile' element={<ProtectedRoute><Profile/></ProtectedRoute>} />
+					<Route path='overview' element={<ProtectedRoute><Overview/></ProtectedRoute>} />
 					<Route path='*' element={<ProtectedRoute><Navigate to='home' /></ProtectedRoute>} />
 				</Route>
 				<Route path='*' element={<Navigate to='home' />} />
