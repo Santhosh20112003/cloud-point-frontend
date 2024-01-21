@@ -1,6 +1,7 @@
 export const links = [
-    { name: "Home", link: "home",icon:"fas fa-house text-xl" },
-    { name: "My Space", link: "myspace",icon:"fas fa-igloo" },
+    
+    { name: "My Space", link: "myspace",icon:"fas fa-cloud" },
+    { name: "Studio", link: "studio",icon:"fas fa-photo-film disabled text-xl" },
     { name: "Profile", link: "profile",icon:"fas fa-address-card" },
   ];
 

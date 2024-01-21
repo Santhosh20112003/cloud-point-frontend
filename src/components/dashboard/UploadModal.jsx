@@ -53,7 +53,7 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
   return (
     <div className="flex items-center justify-center">
       <button
-        className="px-4 py-2 bg-[#00aaff] text-white rounded shadow-lg focus:outline-none hover:bg-[#049ce8]"
+        className="px-4 py-2 active:scale-90 transition-all bg-[#00aaff] text-white rounded shadow-lg focus:outline-none hover:bg-[#049ce8]"
         type="button"
         onClick={() => setShowModal(true)}
       >
@@ -61,7 +61,7 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
       </button>
 
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 overflow-x-hidden backdrop-blur-md overflow-y-auto">
+        <div className="fixed inset-0 flex items-center justify-center z-50 overflow-x-hidden backdrop-brightness-75 backdrop-blur-sm overflow-y-auto">
           <div className="relative w-auto max-w-3xl mx-auto my-6">
             <div className="bg-white rounded-lg shadow-lg p-6">
               <div className="flex justify-between mb-5">

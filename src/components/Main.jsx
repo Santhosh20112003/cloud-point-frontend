@@ -19,12 +19,12 @@ function Main() {
 				<Route path='home' element={<Home/>} />
 				<Route path='login' element={<Enter />} />
 				<Route path='dashboard' element={<ProtectedRoute><Structure/></ProtectedRoute>} >
-					<Route path='' element={<ProtectedRoute><Navigate to='home' /></ProtectedRoute>} />
-					<Route path='home' element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />
+					<Route path='' element={<ProtectedRoute><Navigate to='overview' /></ProtectedRoute>} />
+					<Route path='studio' element={<ProtectedRoute><Overview/></ProtectedRoute>} />
 					<Route path='myspace' element={<ProtectedRoute><Myspace/></ProtectedRoute>} />
 					<Route path='profile' element={<ProtectedRoute><Profile/></ProtectedRoute>} />
-					<Route path='overview' element={<ProtectedRoute><Overview/></ProtectedRoute>} />
-					<Route path='*' element={<ProtectedRoute><Navigate to='home' /></ProtectedRoute>} />
+					<Route path='overview' element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />
+					<Route path='*' element={<ProtectedRoute><Navigate to='overview' /></ProtectedRoute>} />
 				</Route>
 				<Route path='*' element={<Navigate to='home' />} />
 			</Routes>

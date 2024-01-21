@@ -23,24 +23,27 @@ function Profile() {
         const images = await listAll(imagesRef);
         const urls = await Promise.all(
           images.items.map(async (item) => {
-            const url = await getDownloadURL(item);
             const metadata = await getMetadata(item);
-            return {
-              url,
-              id: uuidv4(),
-              name: metadata.name,
-              size: metadata.size,
-              contentType: metadata.contentType,
-              showDropdown: false,
-            };
+  
+            if (metadata.contentType.startsWith('image/')) {
+              const url = await getDownloadURL(item);
+              return {
+                url,
+                id: uuidv4(),
+                name: metadata.name,
+                size: metadata.size,
+                contentType: metadata.contentType,
+                showDropdown: false,
+              };
+            }
           })
         );
-        setFiles(urls);
+        setFiles(urls.filter(Boolean));
       } catch (error) {
         console.log('Error fetching images:', error);
       }
     };
-
+  
     fetchImages();
   }, [user]);
 
@@ -76,7 +79,7 @@ function Profile() {
 
   return (
     <div className='w-full md:h-screen md:max-h-screen max-h-[90vh] h-[90vh] bg-white md:bg-gray-200 flex items-center justify-center'>
-      <div className="relative flex flex-col  overflow-y-scroll overflow-x-hidden items-center md:rounded-[20px] w-full md:mx-5 h-[85vh] md:h-[95vh] p-4 bg-white bg-clip-border shadow-3xl shadow-shadow-500">
+      <div className="relative flex flex-col overflow-y-scroll overflow-x-hidden items-center md:rounded-[20px] w-full md:mx-5 h-[85vh] md:h-[95vh] p-4 bg-white bg-clip-border md:shadow-lg shadow-gray-300">
         <div className="relative flex min-h-[200px] md:min-h-[250px] md:h-[250px]  w-full justify-center rounded-xl bg-cover">
           <img src={profile_banner} className="absolute flex h-full w-full justify-center  rounded-xl brightness-75 bg-gray-300" />
           <h4 className="text-2xl lg:text-4xl uppercase hidden break-all md:block z-20 absolute bottom-2 left-[150px] font-bold text-white ">
@@ -156,9 +159,9 @@ function Profile() {
         </div>
 
         <div className="mt-16 md:ml-10 md:w-full flex flex-col justify-center md:items-start items-center ">
-          <h4 className="text-xl break-all hidden md:block font-bold text-navy-700 ">{user.uid}</h4>
+          <h4 className="text-xl break-all hidden md:inline-flex items-center font-bold text-navy-700 ">{user.uid} <span className="bg-gray-200 ml-2 px-2 py-1 text-sm rounded-xl text-gray-500">userid</span> </h4>
           <h4 className="text-xl break-words text-center md:hidden font-bold text-navy-700 ">{user.displayName}</h4>
-          <h4 className="text-xl text-center break-all md:hidden mt-3 font-bold text-navy-700 ">{user.uid}</h4>
+          <h4 className="text-xl text-center break-all md:hidden mt-3 font-bold text-navy-700 ">{user.uid} </h4>
           <p className="text-lg lg:ms-2 break-all font-normal mt-1 text-gray-600">{user.email}</p>
         </div>
 
@@ -176,9 +179,10 @@ function Profile() {
               {files.slice(0, 4).map((data) => (
                 <div className="p-4" key={data.id}>
                   <div className={`h-52 w-[1fr] bg-gray-500 relative rounded-lg overflow-hidden shadow-lg`}>
-                    <img src={data.url} alt="" className="w-full h-full object-cover relative brightness-50" />
-                    <span className="absolute md:left-[5%] mx-5 text-gray-50 top-[30%] pb-3">
-                      <h1 className=" inline-flex items-center pe-3 gap-2 text-xl font-semibold mb-3">{`${data.name.slice(0, 10)}...`} </h1>
+                    <img src={data.url} alt="" className="w-full h-full object-cover relative brightness-[58%]" />
+                    <span className="absolute md:left-[5%] mx-5 text-gray-50 top-[35%] pb-3">
+                      <h1 className="inline-flex break-all items-center pe-3 gap-2 md:text-2xl text-3xl font-bold mb-3">{data.name.length > 20 ? `${data.name.slice(0, 20)}...` : `${data.name}.${data.contentType.replace("image/",'')}`} </h1>
+                      
                     </span>
                   </div>
                 </div>
