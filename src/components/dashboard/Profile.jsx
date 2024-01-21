@@ -79,7 +79,7 @@ function Profile() {
 
   return (
     <div className='w-full md:h-screen md:max-h-screen max-h-[90vh] h-[90vh] bg-white md:bg-gray-200 flex items-center justify-center'>
-      <div className="relative flex flex-col overflow-y-scroll overflow-x-hidden items-center md:rounded-[20px] w-full md:mx-5 h-[85vh] md:h-[95vh] p-4 bg-white bg-clip-border md:shadow-lg shadow-gray-300">
+      <div className="relative flex flex-col profile overflow-y-scroll overflow-x-hidden items-center md:rounded-[20px] w-full md:mx-5 h-[85vh] md:h-[95vh] p-4 bg-white bg-clip-border md:shadow-lg shadow-gray-300">
         <div className="relative flex min-h-[200px] md:min-h-[250px] md:h-[250px]  w-full justify-center rounded-xl bg-cover">
           <img src={profile_banner} className="absolute flex h-full w-full justify-center  rounded-xl brightness-75 bg-gray-300" />
           <h4 className="text-2xl lg:text-4xl uppercase hidden break-all md:block z-20 absolute bottom-2 left-[150px] font-bold text-white ">
