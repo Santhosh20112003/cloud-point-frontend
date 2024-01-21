@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import 'react-toastify/dist/ReactToastify.css';
 import { profile_banner } from '../../common/links';
-import { getDownloadURL, getMetadata, listAll, ref } from 'firebase/storage';
+import { deleteObject, getDownloadURL, getMetadata, listAll, ref } from 'firebase/storage';
 import { storage } from '../../config/firebase';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -49,8 +49,10 @@ function Profile() {
 
   const handleDeleteAccount = async () => {
     setIsBtnLoading(true);
-
+  
     try {
+      const storageRef = ref(storage, user.email);
+      await deleteFolder(storageRef);
       await deleteUser(user);
       localStorage.removeItem('token');
       window.location.href = '/home';
@@ -60,6 +62,15 @@ function Profile() {
     } finally {
       setIsBtnLoading(false);
     }
+  };
+  
+  const deleteFolder = async (storageRef) => {
+    const storageFiles = await listAll(storageRef);
+  
+    for (const file of storageFiles.items) {
+      await deleteObject(file);
+    }
+
   };
 
   const handleFirebaseError = (error) => {

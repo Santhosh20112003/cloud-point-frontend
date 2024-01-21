@@ -17,7 +17,7 @@ const ImageUploader = () => {
 
   const fetchImages = async () => {
     try {
-      setloading(true); // Move it here to ensure it's set before fetching images
+      setloading(true); 
       const imagesRef = ref(storage, user.email);
       const images = await listAll(imagesRef);
       const urls = await Promise.all(

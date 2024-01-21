@@ -4,14 +4,16 @@ import { getAuth } from "firebase/auth";
 import {getStorage} from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyARcIoxyNN8ZW00-nyn3L0BROwi7k10Da8",
-  authDomain: "cloud-point-91562.firebaseapp.com",
-  projectId: "cloud-point-91562",
-  storageBucket: "cloud-point-91562.appspot.com",
-  messagingSenderId: "909578827922",
-  appId: "1:909578827922:web:b2eabfc052478650144e4b",
-  measurementId: "G-2QJSPMSXW1"
+  apiKey: "AIzaSyCIq3fHBbqGF2JAYIXGudoszrjcCY1Inkg",
+  authDomain: "cloud-point-2edf0.firebaseapp.com",
+  projectId: "cloud-point-2edf0",
+  storageBucket: "cloud-point-2edf0.appspot.com",
+  messagingSenderId: "567073365658",
+  appId: "1:567073365658:web:c001bf7356b2c83ac54923",
+  measurementId: "G-7GQ2WM66NR"
 };
+
+
 
 const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
