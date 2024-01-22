@@ -3,10 +3,9 @@ import React from 'react'
 function Features() {
   return (
 	<section class="text-gray-600 body-font">
-  <div class="container px-20 py-24 mx-auto">
-    <div class="flex flex-col text-center  w-full mb-20">
-	<h1 class="sm:text-4xl text-2xl font-bold title-font text-gray-900">We Offer the <span className="text-[#2170fd] italic">Best Features</span> From</h1>
-      <h1 class="sm:text-4xl text-2xl font-bold mt-5 title-font text-gray-900">Us For Your Convenience</h1>
+  <div class="container lg:px-20 px-5 py-24 mx-auto">
+    <div class="flex flex-col text-center  w-full lg:mb-10 mb-14">
+	<h1 class="sm:text-4xl text-2xl font-bold title-font  leading-10 text-gray-900">We Offer the <span className="text-[#2170fd] italic">Best Features</span> From <br className='hidden lg:block' /> Us For Your Convenience</h1>
     </div>
     <div class="flex flex-wrap -m-4">
       <div class="p-4 md:w-1/3">

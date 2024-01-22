@@ -207,7 +207,7 @@ const ImageUploader = () => {
                     <i className={`fa-solid fa-ellipsis active:scale-75 transition-all rotate-90`}></i>
                   </button>
                   {dataVal.showDropdown && (
-                    <ul className="origin-top-right absolute right-0 mt-2 w-40 rounded-b-md shadow-lg z-50 bg-white ring-1 ring-black ring-opacity-5">
+                    <ul className="origin-top-right absolute right-0 mt-2 w-40 rounded-b-md shadow-lg z-40 bg-white ring-1 ring-black ring-opacity-5">
                       {copySuccess === dataVal.url ? (
                         <li className="py-1 px-2 hover:bg-green-200 bg-green-100" onClick={() => handleCopy(dataVal.url)}>
                           Copied!

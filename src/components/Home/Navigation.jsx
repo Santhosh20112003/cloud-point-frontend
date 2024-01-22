@@ -33,20 +33,18 @@ function Navigation() {
 						<i  className="fas text-xl mt-2 text-primary active:scale-90 transition-all fa-bars"></i>
 						</button>
 						<ul
-                className={`lg:flex lg:items-center w-full lg:pb-0 pb-8 absolute lg:static lg:z-auto left-0 top-0 h-[80vh] z-[30] lg:w-auto   lg:bg-transparent bg-white transition-all duration-500 ease-in ${
+                className={`lg:flex lg:items-center w-full lg:pb-0 pb-8 absolute lg:static lg:z-auto left-0 top-0 h-[70vh] z-[30] lg:w-auto   lg:bg-transparent bg-white transition-all duration-500 ease-in ${
                   open ? 'top-0 z-[-1]' : 'top-[-100vh] z-[-1]'
                 }`}
               >
                 <span className="flex bg-gray-800 items-center justify-start ps-4 w-full gap-3 border-e-2 border-gray-600 h-[10vh]">
-                  <img src={require('../assert/logo.ico')} alt="" className="h-14" />
+                  {/* <img src={require('../assert/logo.ico')} alt="" className="h-14" /> */}
                   <Link to="/home" className="text-white text-2xl font-bold">
                     Cloud Point
                   </Link>
                 </span>
 
-                <span className="flex items-center justify-center w-full mb-3">
-                  
-                </span>
+                
 
                 <div className="w-full pb-3">
                 {links.map((link) => (
@@ -68,8 +66,10 @@ function Navigation() {
                 ))}
                 </div>
 
-                <span className="flex cursor-pointer items-center w-full absolute bottom-0 right-0 h-[20vh] justify-center " onClick={()=>{setOpen(!open)}}>
-                  <i className="fas fa-angle-left text-5xl rotate-90 active:text-3xl transition-all text-gray-300"></i>
+                
+
+                <span className="flex cursor-pointer items-center w-full absolute bottom-0 right-0 active:bg-blue-100 rounded-lg active:scale-75 transition-all h-[20vh] justify-center " onClick={()=>{setOpen(!open)}}>
+                  <i className="fas fa-angle-left text-5xl rotate-90   text-gray-300"></i>
                 </span>
               </ul>
 					</div>

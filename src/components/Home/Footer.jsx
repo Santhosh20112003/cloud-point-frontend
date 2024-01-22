@@ -6,7 +6,7 @@ function Footer() {
 	<footer class="text-gray-600 body-font">
  
   <div class="bg-white">
-    <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
+    <div class="container mx-auto py-5 px-5 flex flex-wrap flex-col sm:flex-row">
       <p class="text-gray-500 text-sm text-center sm:text-left">© 2024 <span className="font-bold">Cloud Point</span> —
         <a href="https://santhosh-technologies.netlify.app" rel="noopener noreferrer" class="text-gray-600 ml-1" target="_blank">@Santhosh Technologies</a>
       </p>

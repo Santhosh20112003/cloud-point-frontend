@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 function CTA1() {
   return (
 	<section class="text-gray-600 body-font">
-  <div class="container mx-auto flex lg:px-24 px-12 py-24 md:flex-row flex-col items-center">
+  <div class="container mx-auto flex lg:px-24 py-24 md:flex-row flex-col items-center">
     <div class="lg:max-w-md lg:w-full md:w-1/2 w-5/6 mb-10 md:mb-0">
     <video autoPlay muted loop class="object-cover object-center rounded">
             <source src="https://ik.imagekit.io/ikmedia/New_website_graphics/Use_Case___Media_Upload_and_Management/Drag_and_drop_interface_D5vN0PtFN_3ePxQ_6vM.mp4" type="video/mp4" />

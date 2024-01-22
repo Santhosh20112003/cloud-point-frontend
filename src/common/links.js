@@ -7,9 +7,9 @@ export const links = [
 
   export const main_links = [
     
-    { name: "Home", link: "/home"},
-    { name: "Contact", link: "/contact"},
-    { name: "Pricing", link: "/pricing"}
+    { name: "Home", link: "/home",icon:"fas fa-house"},
+    { name: "Contact", link: "/contact",icon:"fas fa-paper-plane"},
+    { name: "Pricing", link: "/pricing",icon:"fas fa-money-bill-wave"}
   ];
 
 export const random_login_img = "https://source.unsplash.com/random/1000x800/?funky digital art";
