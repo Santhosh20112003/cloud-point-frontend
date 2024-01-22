@@ -34,3 +34,33 @@
   background-color: darkgrey;
   border-radius: 10px;
 }
+
+.home::-webkit-scrollbar {
+  width: 5px;
+}
+
+.home::-webkit-scrollbar-track {
+  background-color: transparent;
+  margin: 30px 0;
+}
+
+.home::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  border-radius: 10px;
+}
+
+
+.marquee {
+  display: flex;
+  overflow: hidden;
+  animation: marquee 20s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}

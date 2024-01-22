@@ -4,53 +4,14 @@ import { getMetadata, listAll, ref } from 'firebase/storage';
 import { storage } from '../../config/firebase';
 
 import hello from '../assert/cloud-bannar.svg';
+import { useContext } from 'react';
+import { MyContext } from './Structure';
 
 function Home() {
   const { user } = useUserAuth();
   const [loading, setLoading] = useState(false);
-  const [totalSize, setTotalSize] = useState(0);
-  const [fileImgCount, setFileImgCount] = useState(0);
-  const [fileVideoCount, setFileVideoCount] = useState(0);
-  const [totalSizePercent, setTotalSizePercent] = useState(0);
+  const {calculateTotalFileSize , fileImgCount ,fileVideoCount ,totalSize ,totalSizePercent} = useContext(MyContext);
 
-  const calculateTotalFileSize = async () => {
-    setLoading(true);
-    try {
-      const storageRef = ref(storage, user.email);
-      const files = await listAll(storageRef);
-
-      let totalSize = 0;
-      let imgCount = 0;
-      let videoCount = 0;
-
-      for (const file of files.items) {
-        const metadata = await getMetadata(file);
-        totalSize += metadata.size;
-
-        // Check if the content type is an image
-        if (metadata.contentType.startsWith('image/')) {
-          imgCount += 1;
-        }
-        // Check if the content type is a video
-        if (metadata.contentType.startsWith('video/')) {
-          videoCount += 1;
-        }
-      }
-
-      setFileImgCount(imgCount);
-      setFileVideoCount(videoCount);
-      setTotalSize(totalSize);
-
-      const maxTotalSize = 100 * 1024 * 1024;
-      const totalSizePercent = (totalSize / maxTotalSize) * 100;
-      setTotalSizePercent(totalSizePercent);
-    } catch (error) {
-      console.error('Error calculating total file size:', error);
-      setTotalSize(0);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const bytesToMB = (bytes) => {
     if (bytes === 0) return '0 MB';
@@ -59,8 +20,22 @@ function Home() {
     return `${megabytes.toFixed(2)} MB`;
   };
 
+  const calculate = () =>{
+    setLoading(true)
+    try{
+      calculateTotalFileSize();
+    }
+    catch(err){
+      console.log(err);
+    }
+    finally{
+      setLoading(false)
+    }
+    
+  }
+
   useEffect(() => {
-    calculateTotalFileSize();
+    calculate();
   }, [user]);
 
   return (

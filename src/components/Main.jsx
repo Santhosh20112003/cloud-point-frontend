@@ -9,6 +9,8 @@ import { UserAuthContextProvider } from './context/UserAuthContext';
 import ProtectedRoute from './auth/ProtectedRoute';
 import Overview from './dashboard/Overview';
 import Profile from './dashboard/Profile';
+import About from './Home/Contact';
+import Pricing from './Home/Pricing';
 
 function Main() {
   return ( 
@@ -18,6 +20,8 @@ function Main() {
 				<Route path='' element={<Navigate to='home' />} />
 				<Route path='home' element={<Home/>} />
 				<Route path='login' element={<Enter />} />
+				<Route path='contact' element={<About />} />
+				<Route path='pricing' element={<Pricing />} />
 				<Route path='dashboard' element={<ProtectedRoute><Structure/></ProtectedRoute>} >
 					<Route path='' element={<ProtectedRoute><Navigate to='overview' /></ProtectedRoute>} />
 					<Route path='studio' element={<ProtectedRoute><Overview/></ProtectedRoute>} />

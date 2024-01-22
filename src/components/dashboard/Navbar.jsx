@@ -37,7 +37,7 @@ function Navbar() {
                 <span className="flex items-center justify-center w-full mb-3">
                   <Link
                     to="home"
-                    className="text-lg mt-3 text-center py-3 mx-5 font-semibold w-full text-gray-700 rounded-md bg-gray-200"
+                    className="text-lg mt-3 text-center py-3 mx-5 font-semibold w-full text-gray-700 rounded-md bg-white"
                     onClick={() => setOpen(!open)}
                   >
                   Overview

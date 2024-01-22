@@ -8,10 +8,14 @@ module.exports = {
     fontFamily:{
       display:['DM Sans', 'sans-serif'],
       heading:['Josefin Sans', 'sans-serif'],
-      profile:['Bebas Neue', 'sans-serif']
+      profile:['Bebas Neue', 'sans-serif'],
+      adv:['Bungee', 'sans-serif']
     },
     extend: {
       colors: {
+        primary:'#02032c',
+        two:'#02015a',
+        secondary:'#f9fbfe',
         ...mauve,
         ...violet,
         ...red,

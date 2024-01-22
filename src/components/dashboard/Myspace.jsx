@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ref, uploadBytes, getDownloadURL, listAll, deleteObject, getMetadata } from 'firebase/storage';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -6,13 +6,13 @@ import { storage } from '../../config/firebase';
 import { v4 as uuidv4 } from 'uuid';
 import UploadModal from './UploadModal';
 import { useUserAuth } from '../context/UserAuthContext';
+import { MyContext } from './Structure';
 
 const ImageUploader = () => {
+  const {calculateTotalFileSize ,totalSize ,totalSizePercent} = useContext(MyContext);
   const [imgUrl, setImgUrl] = useState([]);
   const { user } = useUserAuth();
   const [copySuccess, setCopySuccess] = useState('');
-  const [totalSize, setTotalSize] = useState(0);
-  const [totalSizePercent, setTotalSizePercent] = useState(0);
   const [loading, setloading] = useState(false);
 
   const fetchImages = async () => {
@@ -42,108 +42,104 @@ const ImageUploader = () => {
     }
   };
 
-  const calculateTotalFileSize = async () => {
-    try {
-      const storageRef = ref(storage, user.email);
-      const files = await listAll(storageRef);
-
-      let totalSize = 0;
-
-      for (const file of files.items) {
-        const metadata = await getMetadata(file);
-        totalSize += metadata.size;
-      }
-      setTotalSize(totalSize);
-      const maxTotalSize = 100 * 1024 * 1024; // 100MB
-      const totalSizePercent = (totalSize / maxTotalSize) * 100;
-      setTotalSizePercent(totalSizePercent);
-    } catch (error) {
-      console.error('Error calculating total file size:', error);
-      setTotalSize(0);
-      setTotalSizePercent(0);
-    }
-  };
-
   useEffect(() => {
     fetchImages();
     calculateTotalFileSize();
   }, [user.email, ref]);
 
-  const handleUpload = (uploadedImg) => {
+
+  const handleUpload = async (uploadedImg) => {
+    try {
     const filename = uploadedImg.name;
     const nameWithoutExtension = filename.split('.').slice(0, -1).join('.');
     let name = nameWithoutExtension;
     let counter = 1;
-
+    
     let existingFile = imgUrl.find((file) => file.name === name);
     while (existingFile) {
-      name = `${nameWithoutExtension} (copy ${counter})`;
-      counter++;
-      existingFile = imgUrl.find((file) => file.name === name);
+    name = `${nameWithoutExtension} (copy ${counter})`;
+    counter++;
+    existingFile = imgUrl.find((file) => file.name === name);
     }
-
+    
     const fileType = uploadedImg.type;
     if (fileType.startsWith('image/') || fileType.startsWith('video/')) {
-      const totalSize = imgUrl.reduce((acc, file) => acc + file.size, 0) + uploadedImg.size;
-      const maxSize = 100 * 1024 * 1024; // 100 MB
-
-      if (totalSize <= maxSize) {
-        const imgRef = ref(storage, `${user.email}/${name}`);
-        uploadBytes(imgRef, uploadedImg).then((snapshot) => {
-          getDownloadURL(snapshot.ref).then((url) => {
-            const file = {
-              url,
-              id: uuidv4(),
-              name,
-              size: uploadedImg.size,
-              contentType: uploadedImg.type,
-              showDropdown: false,
-            };
-            setImgUrl((data) => [...data, file]);
-            calculateTotalFileSize();
-          });
-        });
-		toast.success('File Uploaded Successfully', {
-			position: "top-right",
-			autoClose: 5000,
-			hideProgressBar: false,
-			closeOnClick: true,
-			pauseOnHover: true,
-			draggable: true,
-			progress: undefined,
-			theme: "light",
-			
-			});
-        return true;
-      } else {
-		toast.error('File Uploaded Successfully', {
-			position: "top-right",
-			autoClose: 5000,
-			hideProgressBar: false,
-			closeOnClick: true,
-			pauseOnHover: true,
-			draggable: true,
-			progress: undefined,
-			theme: "light",
-			
-			});
-        return false;
-      }
-    } else {
-		toast.error('File Uploaded Successfully', {
-			position: "top-right",
-			autoClose: 5000,
-			hideProgressBar: false,
-			closeOnClick: true,
-			pauseOnHover: true,
-			draggable: true,
-			progress: undefined,
-			theme: "light",
-			
-			});
-      return false;
+    const size = imgUrl.reduce((acc, file) => acc + file.size, 0) + uploadedImg.size;
+    const maxSize = 100 * 1024 * 1024; // 100 MB
+    
+    if (size <= maxSize) {
+    const imgRef = ref(storage, `${user.email}/${name}`);
+    toast.promise(
+    uploadBytes(imgRef, uploadedImg),
+    {
+    pending: 'Uploading file...',
+    success: 'File uploaded successfully!',
+    error: 'Failed to upload file'
     }
-  };
+    );
+    
+    const snapshot = await uploadBytes(imgRef, uploadedImg);
+    const url = await getDownloadURL(snapshot.ref);
+    
+    const file = {
+    url,
+    id: uuidv4(),
+    name,
+    size: uploadedImg.size,
+    contentType: uploadedImg.type,
+    showDropdown: false,
+    };
+    
+    setImgUrl((data) => [...data, file]);
+    calculateTotalFileSize();
+    
+    return true;
+    } else {
+    toast.error('File Size Exceeds Limit', {
+    position: 'top-right',
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: 'light',
+    });
+    
+    return false;
+    }
+    } else {
+    toast.error('Invalid File Type', {
+    position: 'top-right',
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: 'light',
+    });
+    
+    return false;
+    }
+    } catch (error) {
+    console.error('Error uploading file:', error);
+    
+    toast.error('An error occurred while uploading the file', {
+    position: 'top-right',
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: 'light',
+    });
+    
+    return false;
+    }
+    };
+
 
   const handleDelete = async (id, url) => {
     try {
@@ -193,7 +189,7 @@ const ImageUploader = () => {
         <span className="flex items-start flex-col justify-center gap-3">
           <span className="block">Total Size: {bytesToMB(totalSize)}</span>
           <span className="flex items-center justify-center">
-            <div className="lg:w-[400px] w-[100px] bg-gray-200 flex rounded-full me-3 h-3.5">
+            <div className="lg:w-[400px] w-[120px] bg-gray-200 flex rounded-full me-3 h-3.5">
               <div className="bg-[#049be7] h-3.5 rounded-s-full" style={{ width: `${totalSizePercent}%` }}></div>
             </div>
             {`${totalSizePercent.toFixed(1)}%`}
@@ -202,7 +198,7 @@ const ImageUploader = () => {
         <UploadModal handleUpload={handleUpload} bytesToMB={bytesToMB} />
       </div>
         <div className="flex flex-wrap items-start justify-center lg:justify-stretch gap-5 px-5 my-8">
-          {imgUrl.map((dataVal) => (
+          {imgUrl.length > 0 ? imgUrl.map((dataVal) => (
             <div key={dataVal.id} className="border border-1 rounded-xl border-slate-300 p-2 w-[200px] sm:w-[230px] lg:w-[260px] ">
               <div className="flex bg-gray-100 rounded-t-lg items-center justify-between p-2">
                 <h1 className="p-2 uppercase">{dataVal.contentType.replace(/(image|video|application)\//, '').slice(0, 6).replace('+', '').replace('.', '')}</h1>
@@ -254,7 +250,10 @@ const ImageUploader = () => {
                 <h1 className="text-sm mt-1">{bytesToMB(dataVal.size)}</h1>
               </div>
             </div>
-          ))}
+          )) : <div className="flex items-center w-full h-[60vh] py-5 my-5 justify-center flex-col">
+          <img src='https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png' alt="NO API KEY" className="w-44" />
+          <p className="text-base">Not Yet Uploaded Anything...</p>
+        </div>}
         </div>
 		</span>
       ) : (

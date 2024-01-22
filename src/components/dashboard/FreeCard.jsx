@@ -1,40 +1,33 @@
 import { getMetadata, listAll, ref } from "firebase/storage";
 import { useEffect } from "react";
+import { useContext } from "react";
 import { useState } from "react";
 import { storage } from "../../config/firebase";
 import { useUserAuth } from "../context/UserAuthContext";
+import { MyContext } from "./Structure";
 
 const FreeCard = () => {
   const { user } = useUserAuth();
-  const [totalSizePercent, setTotalSizePercent] = useState(0);
-  const [loading, setloading] = useState(false)
-  const calculateTotalFileSize = async () => {
+  const {calculateTotalFileSize  ,totalSizePercent} = useContext(MyContext);
+
+  const [loading, setloading] = useState(false);
+ 
+  const calculate = () =>{
     setloading(true)
-    try {
-      const storageRef = ref(storage, user.email);
-      const files = await listAll(storageRef);
-
-      let totalSize = 0;
-
-      for (const file of files.items) {
-        const metadata = await getMetadata(file);
-        totalSize += metadata.size;
-      }
-      const maxTotalSize = 100 * 1024 * 1024;
-      const totalSizePercent = (totalSize / maxTotalSize) * 100;
-      setTotalSizePercent(totalSizePercent);
-    } catch (error) {
-      console.error('Error calculating total file size:', error);
-
-      setTotalSizePercent(0);
+    try{
+      calculateTotalFileSize();
     }
-    finally {
+    catch(err){
+      console.log(err);
+    }
+    finally{
       setloading(false)
     }
-  };
+    
+  }
+  
   useEffect(() => {
-
-    calculateTotalFileSize();
+    calculate()
   }, [user])
   return (
 

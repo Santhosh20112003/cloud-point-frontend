@@ -14,7 +14,7 @@ function Sidebar() {
             </div>
             <span className=" w-full flex flex-col items-start">
             <span className="flex items-center justify-center w-full mb-5">
-              <Link to="overview" className='text-lg shadow-lg text-center py-3 mx-5 font-semibold w-full  text-gray-700 rounded-md bg-gray-300' >Overview</Link>
+              <Link to="overview" className='text-lg shadow-lg text-center py-3 mx-5 font-semibold w-full  text-gray-700 rounded-md bg-white' >Overview</Link>
               </span>
               
               <ul className='w-full flex flex-col items-center gap-3'>
