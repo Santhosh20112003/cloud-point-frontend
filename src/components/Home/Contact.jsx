@@ -10,7 +10,7 @@ function About() {
 			<Navigation />
 			<div className="container mx-auto p-8">
 				<section class="text-gray-600 body-font">
-					<div class="container px-12 py-24 mx-auto flex flex-wrap items-center">
+					<div class="container lg:px-12 py-24 mx-auto flex flex-wrap items-center">
 						<div class="lg:w-3/5 md:w-1/2 md:pr-16 lg:pr-0 pr-0">
 							<h1 class="title-font font-medium text-3xl text-gray-900">Contact Us 😉</h1>
 							<p class="leading-relaxed my-4"> Have questions or feedback? We'd love to hear from you! Feel free to

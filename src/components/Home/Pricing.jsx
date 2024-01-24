@@ -17,7 +17,7 @@ function Pricing() {
 				<div class="container mb-20 mx-auto">
 
 					<div class="flex flex-wrap">
-						<div class="px-12 md:w-1/2 w-full">
+						<div class="lg:px-12 md:w-1/2 w-full">
 							<div class="h-full p-6 rounded-lg border-2 border-gray-300 flex flex-col relative overflow-hidden">
 								<h1 class="text-5xl text-gray-900 pb-4 mb-4 border-b border-gray-200 leading-none">Free Forever</h1>
 								<p class="flex items-center text-gray-600 mb-2">
@@ -48,7 +48,7 @@ function Pricing() {
 								</button>
 							</div>
 						</div>
-						<div class="px-12 md:w-1/2 w-full mt-10 md:mt-0">
+						<div class="lg:px-12 md:w-1/2 w-full mt-10 md:mt-0">
 							<div class="h-full p-6 rounded-lg border-2 border-blue-500 flex flex-col relative overflow-hidden">
 								<span class="bg-blue-500 text-white px-3 py-1 tracking-widest text-xs absolute right-0 top-0 rounded-bl">Enterprise</span>
 								<h1 class="text-5xl text-blue-500 pb-4 mb-4 border-b border-gray-200 leading-none">Custom Price</h1>
