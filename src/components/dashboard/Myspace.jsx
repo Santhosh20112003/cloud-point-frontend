@@ -197,9 +197,9 @@ const ImageUploader = () => {
         </span>
         <UploadModal handleUpload={handleUpload} bytesToMB={bytesToMB} />
       </div>
-        <div className="flex flex-wrap items-start justify-center lg:justify-stretch gap-5 px-5 my-8">
+        <div className="flex flex-wrap items-start justify-center lg:grid lg:grid-cols-3 lg:justify-stretch gap-5 px-5 my-8">
           {imgUrl.length > 0 ? imgUrl.map((dataVal) => (
-            <div key={dataVal.id} className="border border-1 rounded-xl border-slate-300 p-2 w-[200px] sm:w-[230px] lg:w-[260px] ">
+            <div key={dataVal.id} className="border border-1 rounded-xl border-slate-300 p-2 w-full lg:w-auto ">
               <div className="flex bg-gray-100 rounded-t-lg items-center justify-between p-2">
                 <h1 className="p-2 uppercase">{dataVal.contentType.replace(/(image|video|application)\//, '').slice(0, 6).replace('+', '').replace('.', '')}</h1>
                 <div className="relative inline-block text-left">
@@ -244,8 +244,8 @@ const ImageUploader = () => {
                 )}
               </div>
               <div className="text-center py-2 bg-gray-100 rounded-b-lg">
-                <h1 title={dataVal.name} className="text-md font-semibold">
-                  {dataVal.name.length > 20 ? `${dataVal.name.slice(0, 20)}...` : `${dataVal.name}.${dataVal.contentType.replace('image/', '').replace('video/', '').slice(0, 4)}`}
+                <h1 title={dataVal.name} className="text-md beak-all font-semibold">
+                  {dataVal.name.length > 15 ? `${dataVal.name.slice(0, 15)}...` : `${dataVal.name}.${dataVal.contentType.replace('image/', '').replace('video/', '').slice(0, 4)}`}
                 </h1>
                 <h1 className="text-sm mt-1">{bytesToMB(dataVal.size)}</h1>
               </div>

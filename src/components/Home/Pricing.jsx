@@ -10,12 +10,11 @@ function Pricing() {
 			<Navigation />
 			<section class="text-gray-600 px-5 pt-20 body-font ">
 				<div class="flex flex-col text-center w-full mb-20">
-					
+
 					<p class="text-xl break-words font-medium title-font mb-2 text-gray-900">Choose the plan that best suits your needs and start using Cloud Point right away.</p>
-					
+
 				</div>
 				<div class="container mb-20 mx-auto">
-
 					<div class="flex flex-wrap">
 						<div class="lg:px-12 md:w-1/2 w-full">
 							<div class="h-full p-6 rounded-lg border-2 border-gray-300 flex flex-col relative overflow-hidden">
@@ -82,10 +81,7 @@ function Pricing() {
 							</div>
 						</div>
 					</div>
-
-
 				</div>
-
 			</section>
 			<Footer />
 		</div>
