@@ -4,6 +4,7 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [err, setErr] = useState(false);
+  const [fileon,setfileon] = useState(false);
   const [previewURL, setPreviewURL] = useState(null);
 
   useEffect(() => {
@@ -14,7 +15,7 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
     };
   
     const handleBeforeUnload = (event) => {
-     if(selectedFile){
+     if(fileon){
       event.preventDefault();
       event.returnValue = '';
   
@@ -36,16 +37,19 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
 
 
   const handleFileChange = (event) => {
+    setfileon(false)
     const file = event.target.files[0];
     if (file && (file.type.startsWith('image/') || file.type.startsWith('video/'))) {
       setSelectedFile(file);
       setErr(false);
       setPreviewURL(URL.createObjectURL(file));
+      setfileon(true)
     } else {
       setSelectedFile(null);
       setErr(true);
       setPreviewURL(null);
     }
+    
   };
 
   const handleSubmit = (event) => {
