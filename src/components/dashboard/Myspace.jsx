@@ -197,7 +197,7 @@ const ImageUploader = () => {
         </span>
         <UploadModal handleUpload={handleUpload} bytesToMB={bytesToMB} />
       </div>
-        <div className="flex flex-wrap items-start justify-center lg:grid lg:grid-cols-3 lg:justify-stretch gap-5 px-5 my-8">
+        <div className="flex flex-wrap items-start justify-center lg:grid lg:grid-cols-3 lg:justify-stretch gap-5 md:px-5 my-8">
           {imgUrl.length > 0 ? imgUrl.map((dataVal) => (
             <div key={dataVal.id} className="border border-1 rounded-xl border-slate-300 p-2 w-full lg:w-auto ">
               <div className="flex bg-gray-100 rounded-t-lg items-center justify-between p-2">
