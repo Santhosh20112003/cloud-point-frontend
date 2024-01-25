@@ -7,8 +7,6 @@ import { v4 as uuidv4 } from 'uuid';
 import UploadModal from './UploadModal';
 import { useUserAuth } from '../context/UserAuthContext';
 import { MyContext } from './Structure';
-import axios from 'axios';
-import fileDownload from 'js-file-download';
 
 const ImageUploader = () => {
   const {calculateTotalFileSize ,totalSize ,totalSizePercent} = useContext(MyContext);
@@ -164,12 +162,15 @@ const ImageUploader = () => {
     }, 2000);
   };
 
-  const handleClick = (url, filename) => {
-    try{
-      window.open(url,'download')
-    }catch(err){
-      console.log(err)
-      toast.error('An error occurred while Downloading the file', {
+  const handleClick = async (url, filename) => {
+    try {
+      const downloadLink = document.createElement('a');
+      downloadLink.href = url;
+      downloadLink.download = filename;
+      downloadLink.click();
+    } catch (err) {
+      console.log(err);
+      toast.error('An error occurred while downloading the file', {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: false,
@@ -178,9 +179,9 @@ const ImageUploader = () => {
         draggable: true,
         progress: undefined,
         theme: 'light',
-        });
+      });
     }
-  }
+  };
 
   const toggleDropdown = (id) => {
     setImgUrl((data) =>
