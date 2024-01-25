@@ -11,6 +11,7 @@ import { MyContext } from './Structure';
 const ImageUploader = () => {
   const {calculateTotalFileSize ,totalSize ,totalSizePercent} = useContext(MyContext);
   const [imgUrl, setImgUrl] = useState([]);
+  const [uploading,setUploading] = useState(false);
   const { user } = useUserAuth();
   const [copySuccess, setCopySuccess] = useState('');
   const [loading, setloading] = useState(false);
@@ -45,100 +46,120 @@ const ImageUploader = () => {
   useEffect(() => {
     fetchImages();
     calculateTotalFileSize();
+    const handleBeforeUnload = (event) => {
+      if (uploading) {
+        event.preventDefault();
+        event.returnValue = '';
+
+        const result = window.confirm('Are you sure you want to proceed?');
+        if (result) {
+          window.location.reload();
+        }
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
   }, [user.email, ref]);
 
 
-  const handleUpload = async (uploadedImg) => {
+  const handleUpload = async (uploadedImgs) => {
     try {
-    const filename = uploadedImg.name;
-    const nameWithoutExtension = filename.split('.').slice(0, -1).join('.');
-    let name = nameWithoutExtension;
-    let counter = 1;
-    
-    let existingFile = imgUrl.find((file) => file.name === name);
-    while (existingFile) {
-    name = `${nameWithoutExtension} (copy ${counter})`;
-    counter++;
-    existingFile = imgUrl.find((file) => file.name === name);
-    }
-    
-    const fileType = uploadedImg.type;
-    if (fileType.startsWith('image/') || fileType.startsWith('video/')) {
-    const size = imgUrl.reduce((acc, file) => acc + file.size, 0) + uploadedImg.size;
-    const maxSize = 100 * 1024 * 1024; // 100 MB
-    
-    if (size <= maxSize) {
-    const imgRef = ref(storage, `${user.email}/${name}`);
-    toast.promise(
-    uploadBytes(imgRef, uploadedImg),
-    {
-    pending: 'Uploading file...',
-    success: 'File uploaded successfully!',
-    error: 'Failed to upload file'
-    }
-    );
-    
-    const snapshot = await uploadBytes(imgRef, uploadedImg);
-    const url = await getDownloadURL(snapshot.ref);
-    
-    const file = {
-    url,
-    id: uuidv4(),
-    name,
-    size: uploadedImg.size,
-    contentType: uploadedImg.type,
-    showDropdown: false,
-    };
-    
-    setImgUrl((data) => [...data, file]);
-    calculateTotalFileSize();
-    
-    return true;
-    } else {
-    toast.error('File Size Exceeds Limit', {
-    position: 'top-right',
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: 'light',
-    });
-    
-    return false;
-    }
-    } else {
-    toast.error('Invalid File Type', {
-    position: 'top-right',
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: 'light',
-    });
-    
-    return false;
-    }
+      const updatedImgUrl = [...imgUrl];
+      setUploading(true);
+  
+      for (let i = 0; i < uploadedImgs.length; i++) {
+        const uploadedImg = uploadedImgs[i];
+        const filename = uploadedImg.name;
+        const nameWithoutExtension = filename.split('.').slice(0, -1).join('.');
+        let name = nameWithoutExtension;
+        let counter = 1;
+  
+        let existingFile = updatedImgUrl.find((file) => file.name === name);
+        while (existingFile) {
+          name = `${nameWithoutExtension} (copy ${counter})`;
+          counter++;
+          existingFile = updatedImgUrl.find((file) => file.name === name);
+        }
+  
+        const fileType = uploadedImg.type;
+        if (fileType.startsWith('image/') || fileType.startsWith('video/')) {
+          const size =
+            updatedImgUrl.reduce((acc, file) => acc + file.size, 0) + uploadedImg.size;
+          const maxSize = 100 * 1024 * 1024; // 100 MB
+  
+          if (size <= maxSize) {
+            const imgRef = ref(storage, `${user.email}/${name}`);
+            const uploadTask = uploadBytes(imgRef, uploadedImg);
+  
+            toast.promise(uploadTask, {
+              pending: 'Uploading file...',
+              success: 'File uploaded successfully!',
+              error: 'Failed to upload file',
+            });
+  
+            const snapshot = await uploadTask;
+            const url = await getDownloadURL(snapshot.ref);
+  
+            const file = {
+              url,
+              id: uuidv4(),
+              name,
+              size: uploadedImg.size,
+              contentType: uploadedImg.type,
+              showDropdown: false,
+            };
+  
+            updatedImgUrl.push(file);
+            calculateTotalFileSize();
+          } else {
+            toast.error('File Size Exceeds Limit', {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'light',
+            });
+          }
+        } else {
+          toast.error('Invalid File Type', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          });
+        }
+      }
+  
+      setImgUrl(updatedImgUrl);
+      setUploading(false);
+      return true;
     } catch (error) {
-    console.error('Error uploading file:', error);
-    
-    toast.error('An error occurred while uploading the file', {
-    position: 'top-right',
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: 'light',
-    });
-    
-    return false;
+      setUploading(false);
+      console.error('Error uploading files:', error);
+  
+      toast.error('An error occurred while uploading the files', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+  
+      return false;
     }
-    };
+  };
 
 
   const handleDelete = async (id, url) => {
