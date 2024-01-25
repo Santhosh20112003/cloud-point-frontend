@@ -7,6 +7,8 @@ import { v4 as uuidv4 } from 'uuid';
 import UploadModal from './UploadModal';
 import { useUserAuth } from '../context/UserAuthContext';
 import { MyContext } from './Structure';
+import axios from 'axios';
+import fileDownload from 'js-file-download';
 
 const ImageUploader = () => {
   const {calculateTotalFileSize ,totalSize ,totalSizePercent} = useContext(MyContext);
@@ -162,6 +164,26 @@ const ImageUploader = () => {
     }, 2000);
   };
 
+  const handleClick = async(url, filename) => {
+    try{
+      const file = await fetch(url);
+      console.log(file)
+      fileDownload(url, filename)
+    }catch(err){
+      console.log(err)
+      toast.error('An error occurred while Downloading the file', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+        });
+    }
+  }
+
   const toggleDropdown = (id) => {
     setImgUrl((data) =>
       data.map((image) => {
@@ -197,7 +219,7 @@ const ImageUploader = () => {
         </span>
         <UploadModal handleUpload={handleUpload} bytesToMB={bytesToMB} />
       </div>
-        <div className="flex flex-wrap items-start justify-center lg:grid lg:grid-cols-3 lg:justify-stretch gap-5 md:px-5 my-8">
+        <div className={`flex flex-wrap items-start justify-center ${ imgUrl.length > 0 && 'lg:grid lg:grid-cols-3'}  gap-5 w-full md:px-5 my-8`}>
           {imgUrl.length > 0 ? imgUrl.map((dataVal) => (
             <div key={dataVal.id} className="border border-1 rounded-xl border-slate-300 p-2 w-full lg:w-auto ">
               <div className="flex bg-gray-100 rounded-t-lg items-center justify-between p-2">
@@ -217,10 +239,10 @@ const ImageUploader = () => {
                           Copy Url
                         </li>
                       )}
-                      <li className="py-1 px-2 active:bg-gray-100 active:text-gray-500 hover:bg-gray-100 rounded-b-md">
-                        <a href={dataVal.url} download={dataVal.name} className="w-full text-left">
+                      <li className="py-1 px-2 lg:block hidden active:bg-gray-100 active:text-gray-500 hover:bg-gray-100 rounded-b-md">
+                        <button onClick={() => handleClick(dataVal.url,dataVal.name)} className="w-full text-left">
                           Download
-                        </a>
+                        </button>
                       </li>
                       <li className="py-1 px-2 active:bg-red-200 active:text-red-500 hover:bg-gray-100 rounded-b-md">
                         <button onClick={() => { handleDelete(dataVal.id, dataVal.url); toggleDropdown('') }} className="w-full text-left">
@@ -231,9 +253,9 @@ const ImageUploader = () => {
                   )}
                 </div>
               </div>
-              <div className="flex items-center justify-center ">
+              <div className="lg:flex hidden items-center justify-center ">
                 {dataVal.contentType.includes('image') ? (
-                  <img src={dataVal.url} alt="uploaded-img" className="w-full bg-gray-50 max-h-[200px] object-contain" />
+                  <img src={dataVal.url} alt="uploaded-img"  className="w-full bg-gray-50 max-h-[200px] object-contain" />
                 ) : dataVal.contentType.includes('video') ? (
                   <video src={dataVal.url} alt="uploaded-img" className="w-full max-h-[200px]"></video>
                 ) : (
@@ -243,6 +265,18 @@ const ImageUploader = () => {
                   </div>
                 )}
               </div>
+              <span onClick={() => handleClick(dataVal.url,dataVal.name)} className="flex lg:hidden items-center justify-center ">
+                {dataVal.contentType.includes('image') ? (
+                  <img src={dataVal.url} alt="uploaded-img"  className="w-full bg-gray-50 max-h-[200px] object-contain" />
+                ) : dataVal.contentType.includes('video') ? (
+                  <video src={dataVal.url} alt="uploaded-img" className="w-full max-h-[200px]"></video>
+                ) : (
+                  <div className="max-w-[250px] min-w-[200px] max-h-[200px] min-h-[200px] bg-gray-50 flex items-center justify-center flex-col px-5">
+                    <i className="fas fa-file h-32 w-16 text-gray-400"></i>
+                    {dataVal.contentType.replace('application/', '').replace('-', '').slice(0, 10)}
+                  </div>
+                )}
+              </span>
               <div className="text-center py-2 bg-gray-100 rounded-b-lg">
                 <h1 title={dataVal.name} className="text-md beak-all font-semibold">
                   {dataVal.name.length > 15 ? `${dataVal.name.slice(0, 15)}...` : `${dataVal.name}.${dataVal.contentType.replace('image/', '').replace('video/', '').slice(0, 4)}`}

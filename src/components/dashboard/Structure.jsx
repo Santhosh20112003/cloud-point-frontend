@@ -48,9 +48,9 @@ function Home() {
     }
   };
 
-  useEffect(()=>{
-    calculateTotalFileSize()
-  },[user])
+  // useEffect(()=>{
+  //   calculateTotalFileSize()
+  // },[user])
 
 
   return (
