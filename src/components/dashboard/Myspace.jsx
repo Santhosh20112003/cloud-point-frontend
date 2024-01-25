@@ -97,6 +97,9 @@ const ImageUploader = () => {
               pending: 'Uploading file...',
               success: 'File uploaded successfully!',
               error: 'Failed to upload file',
+            },{
+              position: 'bottom-right',
+              theme: 'light',
             });
   
             const snapshot = await uploadTask;
@@ -115,7 +118,7 @@ const ImageUploader = () => {
             calculateTotalFileSize();
           } else {
             toast.error('File Size Exceeds Limit', {
-              position: 'top-right',
+              position: 'bottom-right',
               autoClose: 5000,
               hideProgressBar: false,
               closeOnClick: true,
@@ -127,7 +130,7 @@ const ImageUploader = () => {
           }
         } else {
           toast.error('Invalid File Type', {
-            position: 'top-right',
+            position: 'bottom-right',
             autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,
@@ -147,7 +150,7 @@ const ImageUploader = () => {
       console.error('Error uploading files:', error);
   
       toast.error('An error occurred while uploading the files', {
-        position: 'top-right',
+        position: 'bottom-right',
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -230,7 +233,7 @@ const ImageUploader = () => {
                     <i className={`fa-solid fa-ellipsis active:scale-75 transition-all rotate-90`}></i>
                   </button>
                   {dataVal.showDropdown && (
-                    <ul className="origin-top-right absolute right-3 mt-2 w-40 rounded-md shadow-lg z-40 bg-white ring-1 ring-black ring-opacity-5">
+                    <ul className="origin-bottom-right absolute right-3 mt-2 w-40 rounded-md shadow-lg z-40 bg-white ring-1 ring-black ring-opacity-5">
                       {copySuccess === dataVal.url ? (
                         <li className="py-1 px-2 hover:bg-green-200 bg-green-100" onClick={() => handleCopy(dataVal)}>
                           Copied!

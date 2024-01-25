@@ -75,7 +75,7 @@ function Profile() {
 
   const handleFirebaseError = (error) => {
     toast.error(error.message.replace('Firebase: Error ', '').replace(/[()]/g, '').replace('.', ''), {
-      position: "top-right",
+      position: "bottom-right",
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,

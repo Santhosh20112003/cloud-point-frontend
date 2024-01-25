@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useUserAuth } from '../context/UserAuthContext';
-import { getMetadata, listAll, ref } from 'firebase/storage';
-import { storage } from '../../config/firebase';
-
 import hello from '../assert/cloud-bannar.svg';
 import { useContext } from 'react';
 import { MyContext } from './Structure';
