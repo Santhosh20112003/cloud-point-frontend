@@ -164,11 +164,9 @@ const ImageUploader = () => {
     }, 2000);
   };
 
-  const handleClick = async(url, filename) => {
+  const handleClick = (url, filename) => {
     try{
-      const file = await fetch(url);
-      console.log(file)
-      fileDownload(url, filename)
+      window.open(url,'download')
     }catch(err){
       console.log(err)
       toast.error('An error occurred while Downloading the file', {
