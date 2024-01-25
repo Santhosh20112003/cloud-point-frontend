@@ -48,6 +48,10 @@ function Home() {
     }
   };
 
+  useEffect(()=>{
+    calculateTotalFileSize()
+  },[user])
+
 
   return (
     <MyContext.Provider value={{calculateTotalFileSize ,totalSize ,totalSizePercent ,setTotalSize ,setTotalSizePercent,fileVideoCount,fileImgCount}}>
