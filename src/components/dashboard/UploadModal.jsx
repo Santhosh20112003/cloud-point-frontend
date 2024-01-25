@@ -12,13 +12,28 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
         setShowModal(false);
       }
     };
-
+  
+    const handleBeforeUnload = (event) => {
+     if(selectedFile){
+      event.preventDefault();
+      event.returnValue = '';
+  
+      const result = window.confirm('Are you sure you want to proceed?');
+      if (result) {
+        window.location.reload();
+      }
+     }
+    };
+  
+    window.addEventListener('beforeunload', handleBeforeUnload);
     document.addEventListener('keydown', handleKeyDown);
-
+  
     return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
+
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -82,9 +97,9 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
                 </button>
               </div>
               {selectedFile ? (
-                <div className="flex items-center flex-col gap-2 mb-4">
+                <div className="flex items-center flex-col mb-4">
                   {selectedFile.type.startsWith('image/') ? (
-                    <img src={previewURL} alt="Preview" className="max-h-60 rounded" />
+                    <img src={previewURL} alt="Preview" className="max-h-60  rounded" />
                   ) : (
                     <video src={previewURL} alt="Preview" className="max-h-60 rounded" controls />
                   )}

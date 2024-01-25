@@ -154,33 +154,14 @@ const ImageUploader = () => {
     }
   };
 
-  const handleCopy = (url) => {
-    navigator.clipboard.writeText(url);
-    setCopySuccess(url);
+  const handleCopy = (dataVal) => {
+    navigator.clipboard.writeText(dataVal.url);
+    setCopySuccess(dataVal.url);
     setTimeout(() => {
       setCopySuccess('');
-    }, 2000);
-  };
-
-  const handleClick = async (url, filename) => {
-    try {
-      const downloadLink = document.createElement('a');
-      downloadLink.href = url;
-      downloadLink.download = filename;
-      downloadLink.click();
-    } catch (err) {
-      console.log(err);
-      toast.error('An error occurred while downloading the file', {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
-    }
+      toggleDropdown(dataVal.id)
+    }, 1000);
+    
   };
 
   const toggleDropdown = (id) => {
@@ -228,20 +209,20 @@ const ImageUploader = () => {
                     <i className={`fa-solid fa-ellipsis active:scale-75 transition-all rotate-90`}></i>
                   </button>
                   {dataVal.showDropdown && (
-                    <ul className="origin-top-right absolute right-0 mt-2 w-40 rounded-b-md shadow-lg z-40 bg-white ring-1 ring-black ring-opacity-5">
+                    <ul className="origin-top-right absolute right-3 mt-2 w-40 rounded-md shadow-lg z-40 bg-white ring-1 ring-black ring-opacity-5">
                       {copySuccess === dataVal.url ? (
-                        <li className="py-1 px-2 hover:bg-green-200 bg-green-100" onClick={() => handleCopy(dataVal.url)}>
+                        <li className="py-1 px-2 hover:bg-green-200 bg-green-100" onClick={() => handleCopy(dataVal)}>
                           Copied!
                         </li>
                       ) : (
-                        <li className="py-1 px-2 hover:bg-gray-100 " onClick={() => handleCopy(dataVal.url)}>
+                        <li className="py-1 px-2 hover:bg-gray-100 " onClick={() => handleCopy(dataVal)}>
                           Copy Url
                         </li>
                       )}
                       <li className="py-1 px-2 lg:block hidden active:bg-gray-100 active:text-gray-500 hover:bg-gray-100 rounded-b-md">
-                        <button onClick={() => handleClick(dataVal.url,dataVal.name)} className="w-full text-left">
+                        <a href={dataVal.url} download={dataVal.name} className="w-full text-left">
                           Download
-                        </button>
+                        </a>
                       </li>
                       <li className="py-1 px-2 active:bg-red-200 active:text-red-500 hover:bg-gray-100 rounded-b-md">
                         <button onClick={() => { handleDelete(dataVal.id, dataVal.url); toggleDropdown('') }} className="w-full text-left">
@@ -264,7 +245,7 @@ const ImageUploader = () => {
                   </div>
                 )}
               </div>
-              <span onClick={() => handleClick(dataVal.url,dataVal.name)} className="flex lg:hidden items-center justify-center ">
+              <a href={dataVal.url} download={dataVal.name} className="flex lg:hidden items-center justify-center ">
                 {dataVal.contentType.includes('image') ? (
                   <img src={dataVal.url} alt="uploaded-img"  className="w-full bg-gray-50 max-h-[200px] object-contain" />
                 ) : dataVal.contentType.includes('video') ? (
@@ -275,7 +256,7 @@ const ImageUploader = () => {
                     {dataVal.contentType.replace('application/', '').replace('-', '').slice(0, 10)}
                   </div>
                 )}
-              </span>
+              </a>
               <div className="text-center py-2 bg-gray-100 rounded-b-lg">
                 <h1 title={dataVal.name} className="text-md beak-all font-semibold">
                   {dataVal.name.length > 15 ? `${dataVal.name.slice(0, 15)}...` : `${dataVal.name}.${dataVal.contentType.replace('image/', '').replace('video/', '').slice(0, 4)}`}
