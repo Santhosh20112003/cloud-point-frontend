@@ -201,10 +201,11 @@ const ImageUploader = () => {
 
   const bytesToMB = (bytes) => {
     if (bytes === 0) return '0 MB';
+    if (bytes < 1024 * 1024) return `${bytes} bytes`;
 
     const megabytes = bytes / (1024 * 1024);
     return `${megabytes.toFixed(2)} MB`;
-  };
+};
 
   return (
     <div className="md:container mx-auto px-8 w-full bg-white h-[90vh] overflow-y-scroll max-h-[90vh]">
