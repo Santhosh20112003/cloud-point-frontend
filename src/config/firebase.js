@@ -4,13 +4,13 @@ import { getAuth } from "firebase/auth";
 import {getStorage} from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCIq3fHBbqGF2JAYIXGudoszrjcCY1Inkg",
-  authDomain: "cloud-point-2edf0.firebaseapp.com",
-  projectId: "cloud-point-2edf0",
-  storageBucket: "cloud-point-2edf0.appspot.com",
-  messagingSenderId: "567073365658",
-  appId: "1:567073365658:web:c001bf7356b2c83ac54923",
-  measurementId: "G-7GQ2WM66NR"
+  apiKey: "AIzaSyDBrFKcfDhlwlELkUQ49esegMSAMOMteUc",
+  authDomain: "cloud-point2.firebaseapp.com",
+  projectId: "cloud-point2",
+  storageBucket: "cloud-point2.appspot.com",
+  messagingSenderId: "801146514820",
+  appId: "1:801146514820:web:be99cbad70f841eab5c1d1",
+  measurementId: "G-NQ9SQYKD93"
 };
 
 

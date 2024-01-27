@@ -7,10 +7,11 @@ import Myspace from "./dashboard/Myspace";
 import Dashboard from "./dashboard/Home";
 import { UserAuthContextProvider } from './context/UserAuthContext';
 import ProtectedRoute from './auth/ProtectedRoute';
-import Overview from './dashboard/Overview';
+import Overview from './dashboard/AiStudio';
 import Profile from './dashboard/Profile';
 import About from './Home/Contact';
 import Pricing from './Home/Pricing';
+import Editor from './dashboard/Editor';
 
 function Main() {
   return ( 
@@ -25,6 +26,7 @@ function Main() {
 				<Route path='dashboard' element={<ProtectedRoute><Structure/></ProtectedRoute>} >
 					<Route path='' element={<ProtectedRoute><Navigate to='overview' /></ProtectedRoute>} />
 					<Route path='studio' element={<ProtectedRoute><Overview/></ProtectedRoute>} />
+					<Route path='editor' element={<ProtectedRoute><Editor/></ProtectedRoute>} />
 					<Route path='myspace' element={<ProtectedRoute><Myspace/></ProtectedRoute>} />
 					<Route path='profile' element={<ProtectedRoute><Profile/></ProtectedRoute>} />
 					<Route path='overview' element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />

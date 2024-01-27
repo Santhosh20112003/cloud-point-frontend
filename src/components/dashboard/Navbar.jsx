@@ -12,7 +12,7 @@ function Navbar() {
 
   return (
     <nav className={`bg-gray-800 shadow-xl h-[10vh]  ${
-      location.pathname.includes('profile') ? 'md:hidden' : ''
+      location.pathname.includes('profile') || location.pathname.includes('studio') ? 'md:hidden' : ''
     }`}>
       <div className="mx-auto px-4 sm:px-6 lg:px-10">
         <div className="flex justify-between h-[10vh]">

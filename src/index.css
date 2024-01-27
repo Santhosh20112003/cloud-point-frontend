@@ -1,13 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 *{
 	scroll-behavior: smooth;
 	font-family: 'DM Sans', sans-serif;
 }
 
 ::-webkit-scrollbar {
-    width: 15px;
+    width: 8px;
 }
 
  
@@ -48,6 +49,8 @@
   background-color: darkgrey;
   border-radius: 10px;
 }
+
+
 
 
 .marquee {
