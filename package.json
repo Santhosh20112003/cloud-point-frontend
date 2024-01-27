@@ -27,6 +27,7 @@
     "crypto-browserify": "^3.12.0",
     "css-loader": "^6.9.1",
     "file-saver": "^2.0.5",
+    "file-type": "^19.0.0",
     "firebase": "^10.6.0",
     "fortawesome": "^0.0.1-security",
     "framer-motion": "^10.18.0",
