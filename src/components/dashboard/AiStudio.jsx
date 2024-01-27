@@ -7,6 +7,7 @@ import { getDownloadURL, getMetadata, listAll, ref } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import { useUserAuth } from '../context/UserAuthContext';
 import { storage } from '../../config/firebase';
+import * as Dialog from '@radix-ui/react-dialog';
 
 const Overview = () => {
   const [loading, setLoading] = useState(false);
@@ -20,7 +21,6 @@ const Overview = () => {
   const [grayscale, setGrayscale] = useState(false);
   const [invert, setInvert] = useState(false);
   const [sepia, setSepia] = useState(false);
-
   const [editedImage, setEditedImage] = useState(null);
 
   const { user } = useUserAuth();
@@ -72,42 +72,23 @@ const Overview = () => {
   const applyStyles = () => {
     let filter = '';
 
-    if (brightness) {
-      filter += `brightness(${brightness}%) `;
-    }
-
-    if (blur) {
-      filter += `blur(${blur}px) `;
-    }
-
-    if (contrast) {
-      filter += `contrast(${contrast}%) `;
-    }
-
-    if (saturation) {
-      filter += `saturate(${saturation}%) `;
-    }
-
-    if (grayscale) {
-      filter += 'grayscale(100%) ';
-    }
-
-    if (invert) {
-      filter += 'invert(100%) ';
-    }
-
-    if (sepia) {
-      filter += 'sepia(100%) ';
-    }
+    if (brightness) filter += `brightness(${brightness}%) `;
+    if (blur) filter += `blur(${blur}px) `;
+    if (contrast) filter += `contrast(${100 - contrast}%) `;
+    if (saturation) filter += `saturate(${100 - saturation}%) `;
+    if (grayscale) filter += 'grayscale(100%) ';
+    if (invert) filter += 'invert(100%) ';
+    if (sepia) filter += 'sepia(100%) ';
 
     return {
       filter: filter.trim(),
     };
   };
+
   useEffect(() => {
     const loadImage = async () => {
       try {
-        const response = await fetch(selectedImage);
+        const response = await fetch(selectedImage, { mode: 'no-cors' });
         const blob = await response.blob();
         const dataURL = await new Promise((resolve) => {
           const reader = new FileReader();
@@ -125,13 +106,43 @@ const Overview = () => {
     }
   }, [selectedImage, brightness, blur, contrast, saturation, grayscale, invert, sepia]);
 
-
-
   return (
     <div className="w-full md:h-screen md:max-h-screen max-h-[90vh] h-[90vh] bg-white md:bg-gray-200">
       <header className="w-full h-[10vh] flex items-center justify-between px-5 py-8 bg-[#3897f0]">
         <h1 className="text-2xl text-white font-bold">
-          <i className="fas fa-photo-film"></i> Ai Studio
+          <span className="lg:hidden">
+            <Dialog.Root>
+              <Dialog.Trigger asChild>
+                <button className="">
+                  <i className="fas fa-bars"></i>
+                </button>
+              </Dialog.Trigger>
+              <Dialog.Portal >
+                <Dialog.Overlay className="bg-blackA6 data-[state=open]:animate-overlayShow fixed inset-0" />
+                <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] h-[90vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+                  <div className="w-full h-full block bg-gray-50  px-3 py-2 divide-y-2 overflow-y-scroll">
+                    <h1 className="text-xl text-mauve11 text-center w-full py-3 px-2 font-semibold">Your Images</h1>
+                    <div className="px-3 pt-5 pb-3 images overflow-y-scroll flex flex-col gap-5 items-center justify-center">
+                      {imgUrl.map((item) => (
+                        item.contentType.startsWith('image/') && (
+                          <Dialog.Close asChild>
+                            <img
+                              key={item.id}
+                              src={item.url}
+                              alt=""
+                              className={`w-full brightness-90 rounded-md ${selectedImage === item.url ? 'border-2 border-white outline outline-[#3897f0]' : ''}`}
+                              onClick={() => { handleImageSelect(item.url); }}
+                            />
+                          </Dialog.Close>
+                        )
+                      ))}
+                    </div>
+                  </div>
+                </Dialog.Content>
+              </Dialog.Portal>
+            </Dialog.Root>
+          </span>
+          <i className="fas lg:block hidden fa-photo-film"></i> Ai Studio
         </h1>
         <span className="flex items-center justify-center">
           <button className="px-5 py-2 active:scale-90 transition-all rounded-full shadow-md bg-white outline-none border-none">
@@ -175,9 +186,145 @@ const Overview = () => {
                 className="px-3.5 py-2 cursor-pointer bg-blue-100 text-blue-500 text-md font-semibold font-display rounded-full active:scale-95 transition-all fa-solid fa-download lg:hidden absolute bottom-3 right-3"
               ></button>
 
-              <button
-                className="px-3.5 py-2 cursor-pointer bg-blue-100 text-blue-500 text-md font-semibold font-display rounded-full active:scale-95 transition-all fa-solid fa-sliders lg:hidden absolute top-3 right-3"
-              ></button>
+
+              <Dialog.Root>
+                <Dialog.Trigger asChild>
+                  <button className="px-3.5 py-2 cursor-pointer bg-blue-100 text-blue-500 text-md font-semibold font-display rounded-full active:scale-95 transition-all  lg:hidden absolute top-3 right-3">
+                    <i className="fa-solid fa-sliders"></i>
+                  </button>
+                </Dialog.Trigger>
+                <Dialog.Portal>
+                  <Dialog.Overlay className="bg-blackA6 data-[state=open]:animate-overlayShow fixed inset-0" />
+                  <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%]  w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+                    <Tabs.Root className="flex flex-col w-full" defaultValue="tab1">
+                      <Tabs.List className="shrink-0 flex border-b border-mauve6" aria-label="Manage your account">
+                        <Tabs.Trigger
+                          className="bg-white px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none text-mauve11 select-none font-semibold data-[state=active]:text-blue-500 data-[state=active]:bg-blue-100 outline-none cursor-default "
+                          value="tab1"
+                        >
+                          <i className="fa-solid fa-sliders mr-2"></i> Edit
+                        </Tabs.Trigger>
+
+                      </Tabs.List>
+                      <Tabs.Content className="grow p-5 bg-white outline-none" value="tab1">
+                        <div className="mb-10">
+                          <h1 className="text-lg font-semibold">Brightness</h1>
+                          <Slider.Root className="relative flex items-center select-none w-full h-5"
+                            value={[brightness]}
+                            max={200}
+                            step={1}
+                            onValueChange={(value) => { setBrightness(value) }}>
+                            <Slider.Track className="bg-blackA3 relative grow rounded-full h-[3px]">
+                              <Slider.Range className="absolute bg-blue-300 rounded-full h-full" />
+                            </Slider.Track>
+                            <Slider.Thumb
+                              className="block w-5 h-5 bg-gray-300 shadow-[0_2px_10px] shadow-blackA4 rounded-[10px] focus:outline-none focus:shadow-[0_0_0_5px] focus:shadow-blackA1"
+                              aria-label="Volume"
+                            />
+                          </Slider.Root>
+                        </div>
+                        <div className="my-10">
+                          <h1 className="text-lg font-semibold">Blur</h1>
+                          <Slider.Root className="relative flex items-center select-none w-full h-5"
+                            value={[blur]}
+                            max={50}
+                            step={1}
+                            onValueChange={(value) => { setBlur(value) }}>
+                            <Slider.Track className="bg-blackA3 relative grow rounded-full h-[3px]">
+                              <Slider.Range className="absolute bg-blue-300 rounded-full h-full" />
+                            </Slider.Track>
+                            <Slider.Thumb
+                              className="block w-5 h-5 bg-gray-300 shadow-[0_2px_10px] shadow-blackA4 rounded-[10px] focus:outline-none focus:shadow-[0_0_0_5px] focus:shadow-blackA1"
+                              aria-label="Volume"
+                            />
+                          </Slider.Root>
+                        </div>
+                        <div className="my-10">
+                          <h1 className="text-lg font-semibold">Contrast</h1>
+                          <Slider.Root className="relative flex items-center select-none w-full h-5" value={[contrast]}
+                            max={100}
+                            step={1}
+                            onValueChange={(value) => { setContrast(value) }}>
+                            <Slider.Track className="bg-blackA3 relative grow rounded-full h-[3px]">
+                              <Slider.Range className="absolute bg-blue-300 rounded-full h-full" />
+                            </Slider.Track>
+                            <Slider.Thumb
+                              className="block w-5 h-5 bg-gray-300 shadow-[0_2px_10px] shadow-blackA4 rounded-[10px] focus:outline-none focus:shadow-[0_0_0_5px] focus:shadow-blackA1"
+                              aria-label="Volume"
+                            />
+                          </Slider.Root>
+                        </div>
+                        <div className="my-10">
+                          <h1 className="text-lg font-semibold">Saturate</h1>
+                          <Slider.Root className="relative flex items-center select-none w-full h-5" value={[saturation]}
+                            max={100}
+                            step={1}
+                            onValueChange={(value) => { setSaturation(value) }}>
+                            <Slider.Track className="bg-blackA3 relative grow rounded-full h-[3px]">
+                              <Slider.Range className="absolute bg-blue-300 rounded-full h-full" />
+                            </Slider.Track>
+                            <Slider.Thumb
+                              className="block w-5 h-5 bg-gray-300 shadow-[0_2px_10px] shadow-blackA4 rounded-[10px] focus:outline-none focus:shadow-[0_0_0_5px] focus:shadow-blackA1"
+                              aria-label="Volume"
+                            />
+                          </Slider.Root>
+                        </div>
+                        <div className="my-10">
+                          <div className="flex items-center">
+                            <Switch.Root
+                              className="w-[42px] h-[25px] bg-blackA6 rounded-full relative data-[state=checked]:bg-[#3897f0] outline-none"
+                              id="airplane-mode"
+                              value={[grayscale]}
+                              onCheckedChange={(value) => { setGrayscale(value); console.log(value) }}
+                              style={{ '-webkit-tap-highlight-color': 'rgba(0, 0, 0, 0)' }}
+                            >
+                              <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                            </Switch.Root>
+                            <label className="text-mauve11 text-lg leading-none pl-[15px]" htmlFor="Grayscale">
+                              Grayscale
+                            </label>
+                          </div>
+                        </div>
+                        <div className="my-10">
+                          <div className="flex items-center">
+                            <Switch.Root
+                              className="w-[42px] h-[25px] bg-blackA6 rounded-full relative data-[state=checked]:bg-[#3897f0] outline-none"
+                              id="airplane-mode"
+                              value={[invert]}
+                              onCheckedChange={(value) => { setInvert(value) }}
+                              style={{ '-webkit-tap-highlight-color': 'rgba(0, 0, 0, 0)' }}
+                            >
+                              <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                            </Switch.Root>
+                            <label className="text-mauve11 text-lg leading-none pl-[15px]" htmlFor="Grayscale">
+                              Invert
+                            </label>
+                          </div>
+                        </div>
+                        <div className="mt-10">
+                          <div className="flex items-center">
+                            <Switch.Root
+                              className="w-[42px] h-[25px] bg-blackA6 rounded-full relative data-[state=checked]:bg-[#3897f0] outline-none"
+                              id="airplane-mode"
+                              value={[sepia]}
+                              onCheckedChange={(value) => { setSepia(value) }}
+
+                            >
+                              <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+                            </Switch.Root>
+                            <label className="text-mauve11 text-lg leading-none pl-[15px]" htmlFor="Grayscale">
+                              Sepia
+                            </label>
+                          </div>
+                        </div>
+                      </Tabs.Content>
+
+                    </Tabs.Root>
+                  </Dialog.Content>
+                </Dialog.Portal>
+              </Dialog.Root>
+
+
             </div>
           </div>
           <div className="min-h-[10vh] max-h-[100px] px-3 py-2 h-[10vh] w-full bg-blue-100">
@@ -211,21 +358,16 @@ const Overview = () => {
               >
                 <i className="fa-solid fa-sliders mr-2"></i> Edit
               </Tabs.Trigger>
-              <Tabs.Trigger
-                className="bg-white px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none text-mauve11 select-none font-semibold data-[state=active]:text-blue-500 data-[state=active]:bg-blue-100 outline-none cursor-default"
-                value="tab2"
-              >
-                Filter
-              </Tabs.Trigger>
+
             </Tabs.List>
             <Tabs.Content className="grow p-5 bg-white outline-none" value="tab1">
               <div className="mb-10">
                 <h1 className="text-lg font-semibold">Brightness</h1>
                 <Slider.Root className="relative flex items-center select-none w-full h-5"
-                  defaultValue={[brightness]}
+                  value={[brightness]}
                   max={200}
                   step={1}
-                  onValueChange={(value)=>{setBrightness(value)}}>
+                  onValueChange={(value) => { setBrightness(value) }}>
                   <Slider.Track className="bg-blackA3 relative grow rounded-full h-[3px]">
                     <Slider.Range className="absolute bg-blue-300 rounded-full h-full" />
                   </Slider.Track>
@@ -237,11 +379,11 @@ const Overview = () => {
               </div>
               <div className="my-10">
                 <h1 className="text-lg font-semibold">Blur</h1>
-                <Slider.Root className="relative flex items-center select-none w-full h-5" 
-                  defaultValue={[blur]}
-                  max={100}
+                <Slider.Root className="relative flex items-center select-none w-full h-5"
+                  value={[blur]}
+                  max={50}
                   step={1}
-                  onValueChange={(value)=>{setBlur(value)}}>
+                  onValueChange={(value) => { setBlur(value) }}>
                   <Slider.Track className="bg-blackA3 relative grow rounded-full h-[3px]">
                     <Slider.Range className="absolute bg-blue-300 rounded-full h-full" />
                   </Slider.Track>
@@ -253,10 +395,10 @@ const Overview = () => {
               </div>
               <div className="my-10">
                 <h1 className="text-lg font-semibold">Contrast</h1>
-                <Slider.Root className="relative flex items-center select-none w-full h-5" defaultValue={[contrast]}
+                <Slider.Root className="relative flex items-center select-none w-full h-5" value={[contrast]}
                   max={100}
                   step={1}
-                  onValueChange={(value)=>{setContrast(value)}}>
+                  onValueChange={(value) => { setContrast(value) }}>
                   <Slider.Track className="bg-blackA3 relative grow rounded-full h-[3px]">
                     <Slider.Range className="absolute bg-blue-300 rounded-full h-full" />
                   </Slider.Track>
@@ -268,10 +410,10 @@ const Overview = () => {
               </div>
               <div className="my-10">
                 <h1 className="text-lg font-semibold">Saturate</h1>
-                <Slider.Root className="relative flex items-center select-none w-full h-5" defaultValue={[saturation]}
+                <Slider.Root className="relative flex items-center select-none w-full h-5" value={[saturation]}
                   max={100}
                   step={1}
-                  onValueChange={(value)=>{setSaturation(value)}}>
+                  onValueChange={(value) => { setSaturation(value) }}>
                   <Slider.Track className="bg-blackA3 relative grow rounded-full h-[3px]">
                     <Slider.Range className="absolute bg-blue-300 rounded-full h-full" />
                   </Slider.Track>
@@ -286,8 +428,8 @@ const Overview = () => {
                   <Switch.Root
                     className="w-[42px] h-[25px] bg-blackA6 rounded-full relative data-[state=checked]:bg-[#3897f0] outline-none"
                     id="airplane-mode"
-                    defaultChecked={[grayscale]}
-                    onCheckedChange={(value)=>{setGrayscale(value)}}
+                    value={[grayscale]}
+                    onCheckedChange={(value) => { setGrayscale(value); console.log(value) }}
                     style={{ '-webkit-tap-highlight-color': 'rgba(0, 0, 0, 0)' }}
                   >
                     <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
@@ -302,8 +444,8 @@ const Overview = () => {
                   <Switch.Root
                     className="w-[42px] h-[25px] bg-blackA6 rounded-full relative data-[state=checked]:bg-[#3897f0] outline-none"
                     id="airplane-mode"
-                    defaultChecked={[invert]}
-                    onCheckedChange={(value)=>{setInvert(value)}}
+                    value={[invert]}
+                    onCheckedChange={(value) => { setInvert(value) }}
                     style={{ '-webkit-tap-highlight-color': 'rgba(0, 0, 0, 0)' }}
                   >
                     <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
@@ -318,9 +460,9 @@ const Overview = () => {
                   <Switch.Root
                     className="w-[42px] h-[25px] bg-blackA6 rounded-full relative data-[state=checked]:bg-[#3897f0] outline-none"
                     id="airplane-mode"
-                    defaultChecked={[sepia]}
-                    onCheckedChange={(value)=>{setSepia(value)}}
-                    style={{ '-webkit-tap-highlight-color': 'rgba(0, 0, 0, 0)' }}
+                    value={[sepia]}
+                    onCheckedChange={(value) => { setSepia(value) }}
+
                   >
                     <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
                   </Switch.Root>
@@ -330,67 +472,7 @@ const Overview = () => {
                 </div>
               </div>
             </Tabs.Content>
-            <Tabs.Content className="grow p-5 bg-white outline-none overflow-y-scroll" value="tab2">
-              <p className="mb-5 text-mauve11 text-[15px] leading-normal">Make changes here. Click save when you're done.</p>
-              <div className="grid grid-cols-2 gap-5 flex-wrap ">
-                <button
 
-                  onClick={() => setOpen(!open)}
-                  className={`cursor-pointer active:scale-95 transition-all w-32 h-32 rounded-md bg-gray-300 flex items-center justify-center relative ${open && 'border-white outline outline-blue-400 border-2'}`}
-                >
-                  <img src={selectedImage || random_login_img} alt="" className="w-full object-cover rounded-md brightness-75 h-full" />
-                  <h1 className="absolute text-center text-white font-semibold">Original</h1>
-                </button>
-                <button
-
-                  onClick={() => setOpen(!open)}
-                  className={`cursor-pointer active:scale-95 transition-all w-32 h-32 rounded-md bg-gray-300 flex items-center justify-center relative ${open && 'border-white outline outline-blue-400 border-2'}`}
-                >
-                  <img src={selectedImage || random_login_img} alt="" className="w-full object-cover rounded-md brightness-75 h-full" />
-                  <h1 className="absolute text-center text-white font-semibold">Golden</h1>
-                </button>
-                <button
-
-                  onClick={() => setOpen(!open)}
-                  className={`cursor-pointer active:scale-95 transition-all w-32 h-32 rounded-md bg-gray-300 flex items-center justify-center relative ${open && 'border-white outline outline-blue-400 border-2'}`}
-                >
-                  <img src={selectedImage || random_login_img} alt="" className="w-full object-cover rounded-md brightness-75 h-full" />
-                  <h1 className="absolute text-center text-white font-semibold">B&W</h1>
-                </button>
-                <button
-
-                  onClick={() => setOpen(!open)}
-                  className={`cursor-pointer active:scale-95 transition-all w-32 h-32 rounded-md bg-gray-300 flex items-center justify-center relative ${open && 'border-white outline outline-blue-400 border-2'}`}
-                >
-                  <img src={selectedImage || random_login_img} alt="" className="w-full object-cover rounded-md brightness-75 h-full" />
-                  <h1 className="absolute text-center text-white font-semibold">Film</h1>
-                </button>
-                <button
-
-                  onClick={() => setOpen(!open)}
-                  className={`cursor-pointer active:scale-95 transition-all w-32 h-32 rounded-md bg-gray-300 flex items-center justify-center relative ${open && 'border-white outline outline-blue-400 border-2'}`}
-                >
-                  <img src={selectedImage || random_login_img} alt="" className="w-full object-cover rounded-md brightness-75 h-full" />
-                  <h1 className="absolute text-center text-white font-semibold">Burn</h1>
-                </button>
-                <button
-
-                  onClick={() => setOpen(!open)}
-                  className={`cursor-pointer active:scale-95 transition-all w-32 h-32 rounded-md bg-gray-300 flex items-center justify-center relative ${open && 'border-white outline outline-blue-400 border-2'}`}
-                >
-                  <img src={selectedImage || random_login_img} alt="" className="w-full object-cover rounded-md brightness-75 h-full" />
-                  <h1 className="absolute text-center text-white font-semibold">Cool Light</h1>
-                </button>
-                <button
-
-                  onClick={() => setOpen(!open)}
-                  className={`cursor-pointer active:scale-95 transition-all w-32 h-32 rounded-md bg-gray-300 flex items-center justify-center relative ${open && 'border-white outline outline-blue-400 border-2'}`}
-                >
-                  <img src={selectedImage || random_login_img} alt="" className="w-full object-cover rounded-md brightness-75 h-full" />
-                  <h1 className="absolute text-center text-white font-semibold">Vintage</h1>
-                </button>
-              </div>
-            </Tabs.Content>
           </Tabs.Root>
         </div>
       </div>
