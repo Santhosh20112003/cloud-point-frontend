@@ -23,7 +23,7 @@ function Navbar() {
               </button>
 
               <ul
-                className={`md:flex md:items-center w-[250px] md:pb-0 pb-8 absolute md:static md:z-auto left-0 top-0 h-screen z-[30] md:w-auto md:pl-0  md:bg-transparent bg-[#80cde8] transition-all duration-500 ease-in ${
+                className={`md:flex md:items-center w-[250px]  md:pb-0 pb-8 absolute md:static md:z-auto left-0 top-0 h-screen z-[60] md:w-auto md:pl-0  md:bg-transparent bg-[#80cde8] transition-all duration-500 ease-in ${
                   open ? 'left-0 z-[-1]' : 'left-[-250px] z-[-1]'
                 }`}
               >
