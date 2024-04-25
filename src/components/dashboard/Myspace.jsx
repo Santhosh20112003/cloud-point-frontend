@@ -15,7 +15,6 @@ import UploadModal from "./UploadModal";
 import { useUserAuth } from "../context/UserAuthContext";
 import { MyContext } from "./Structure";
 import { getCurrentTimeInUTCFormat, ParseDate } from "../../common/methods";
-import { useFormControlStyles } from "@chakra-ui/react";
 import { useRef } from "react";
 
 const ImageUploader = () => {
@@ -166,10 +165,12 @@ const ImageUploader = () => {
       const storageRef = ref(storage, url);
       await deleteObject(storageRef);
       setImgUrl((data) => data.filter((image) => image.id !== id));
+      toast.success("File Deleted Successfully", { position: "top-center" });
       calculateTotalFileSize();
       console.log("Success");
     } catch (error) {
-      console.log("Error deleting video:", error);
+      toast.error("Unable to deleting file ", { position: "top-center" });
+      console.log("Error deleting :", error);
     }
   };
 
@@ -182,19 +183,6 @@ const ImageUploader = () => {
     }, 1000);
   };
 
-  const downloadFileFromUrl = async (fileUrl, fileName) => {
-    try {
-      const response = await fetch(fileUrl);
-      const blob = await response.blob();
-  
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = fileName;
-      a.click();
-    } catch (error) {
-      console.error("Error downloading file:", error);
-    }
-  };
 
   const toggleDropdown = (id) => {
     setImgUrl((data) =>
