@@ -36,7 +36,7 @@ const FreeCard = () => {
         <div className=" w-full flex bg-white items-center justify-center flex-col shadow-lg relative rounded-3xl py-3 divide-y-2">
 
 
-          <h1 className="text-md mt-3 font-semibold inline-flex items-center gap-1 capitalize text-slate-600"> {user.emailVerified && <img src={require('../assert/verified.png')} alt="verified" className="w-5 rounded-full" />} {user.displayName} </h1>
+          <h1 className="text-md mt-3 font-semibold inline-flex items-center gap-1 capitalize text-slate-600"> {user.emailVerified && <img src={require('../assert/verified.png')} alt="verified" className="w-5 rounded-full" />}   {user?.displayName?.length > 18 ? `${user.displayName.slice(0,18)}..` : user.displayName } </h1>
 
           <span className="flex mt-3 pt-3 items-center justify-center">
             <div className="w-[100px] bg-gray-200 flex rounded-full me-3 h-3.5">

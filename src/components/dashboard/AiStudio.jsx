@@ -16,7 +16,7 @@ import { storage } from "../../config/firebase";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { MyContext } from "./Structure";
-import { ToastContainer, toast } from "react-toastify";
+import toast, { Toaster } from "react-hot-toast";
 import "react-toastify/dist/ReactToastify.css";
 import CommingSoon from "./CommingSoon";
 
@@ -778,11 +778,16 @@ const Overview = () => {
       <div className="absolute top-0 right-0 w-full h-screen inset-0 flex items-center justify-center z-50 overflow-x-hidden backdrop-brightness-75 backdrop-blur-[3px] overflow-y-auto">
         <div className="relative mx-auto my-6 ">
           <div className="bg-white rounded-lg shadow-lg p-6 flex items-center justify-center flex-col">
-            <img src='https://ik.imagekit.io/Santhosh2003/Software%20engineer-cuate.svg' className='' alt="Hello" />
+            <img
+              src="https://ik.imagekit.io/Santhosh2003/Software%20engineer-cuate.svg"
+              className=""
+              alt="Hello"
+            />
             <h1 className="text-xl font-bold">Comming Soon Developing ...</h1>
           </div>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 };

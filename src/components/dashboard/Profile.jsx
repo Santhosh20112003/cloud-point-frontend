@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { deleteUser } from 'firebase/auth';
 import { useUserAuth } from '../context/UserAuthContext';
-import { ToastContainer, toast } from 'react-toastify';
+import toast, { Toaster } from "react-hot-toast";
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
-import 'react-toastify/dist/ReactToastify.css';
 import { profile_banner } from '../../common/links';
 import { deleteObject, getDownloadURL, getMetadata, listAll, ref } from 'firebase/storage';
 import { storage } from '../../config/firebase';
@@ -207,7 +206,7 @@ function Profile() {
           </div>
         ))}
       </div>
-      <ToastContainer />
+      <Toaster />
     </div>
   );
 }

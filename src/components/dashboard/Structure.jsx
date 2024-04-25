@@ -1,10 +1,10 @@
-import { getMetadata, listAll, ref } from 'firebase/storage';
-import React, { createContext, useEffect, useState } from 'react';
-import {Outlet } from 'react-router-dom';
-import { storage } from '../../config/firebase';
-import { useUserAuth } from '../context/UserAuthContext';
-import Navbar from './Navbar';
-import Sidebar from './Sidebar';
+import { getMetadata, listAll, ref } from "firebase/storage";
+import React, { createContext, useState } from "react";
+import { Outlet } from "react-router-dom";
+import { storage } from "../../config/firebase";
+import { useUserAuth } from "../context/UserAuthContext";
+import Navbar from "./Navbar";
+import Sidebar from "./Sidebar";
 
 export const MyContext = createContext("");
 
@@ -13,7 +13,7 @@ function Home() {
   const [totalSizePercent, setTotalSizePercent] = useState(0);
   const [fileImgCount, setFileImgCount] = useState(0);
   const [fileVideoCount, setFileVideoCount] = useState(0);
-  const {user} = useUserAuth();
+  const { user } = useUserAuth();
   const calculateTotalFileSize = async () => {
     try {
       const storageRef = ref(storage, user.email);
@@ -27,11 +27,11 @@ function Home() {
         const metadata = await getMetadata(file);
         totalSize += metadata.size;
         // Check if the content type is an image
-        if (metadata.contentType.startsWith('image/')) {
+        if (metadata.contentType.startsWith("image/")) {
           imgCount += 1;
         }
         // Check if the content type is a video
-        if (metadata.contentType.startsWith('video/')) {
+        if (metadata.contentType.startsWith("video/")) {
           videoCount += 1;
         }
       }
@@ -42,7 +42,7 @@ function Home() {
       const totalSizePercent = (totalSize / maxTotalSize) * 100;
       setTotalSizePercent(totalSizePercent);
     } catch (error) {
-      console.error('Error calculating total file size:', error);
+      console.error("Error calculating total file size:", error);
       setTotalSize(0);
       setTotalSizePercent(0);
     }
@@ -52,18 +52,27 @@ function Home() {
   //   calculateTotalFileSize()
   // },[user])
 
-
   return (
-    <MyContext.Provider value={{calculateTotalFileSize ,totalSize ,totalSizePercent ,setTotalSize ,setTotalSizePercent,fileVideoCount,fileImgCount}}>
-    <div className="w-full h-screen flex">
-      <Sidebar/>
-          <div className="w-full h-screen bg-slate-100">
-            <Navbar />
-            <Outlet />
-          </div>
-    </div>
+    <MyContext.Provider
+      value={{
+        calculateTotalFileSize,
+        totalSize,
+        totalSizePercent,
+        setTotalSize,
+        setTotalSizePercent,
+        fileVideoCount,
+        fileImgCount,
+      }}
+    >
+      <div className="w-full h-screen flex">
+        <Sidebar />
+        <div className="w-full h-screen bg-slate-100">
+          <Navbar />
+          <Outlet />
+        </div>
+      </div>
     </MyContext.Provider>
-  )
+  );
 }
 
-export default Home
+export default Home;

@@ -127,7 +127,7 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
                   onClick={() => setShowModal(false)}
                 >
                   <svg
-                    className="w-6 h-6"
+                    className="w-5 h-5 md:w-6 md:h-6"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -145,11 +145,11 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
                         <div className="relative">
                           <img src={previewURLs[index]} alt="Preview" className="max-h-60 rounded" />
                           <button
-                            className="absolute top-1 right-1 text-gray-500 hover:text-blue-500 focus:outline-none"
+                            className="absolute top-1 bg-[#21212180] active:bg-gray-600 active:scale-90 transition-all p-1  rounded-full right-1 text-gray-50 hover:text-white  focus:outline-none"
                             onClick={() => removeImage(index)}
                           >
                             <svg
-                              className="w-5 h-5"
+                              className="lg:w-3 lg:h-3 w-4 h-4"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -163,11 +163,11 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
                         <div className="relative">
                           <video src={previewURLs[index]} alt="Preview" className="max-h-60 rounded" controls />
                           <button
-                            className="absolute top-1 right-1 text-gray-500 hover:text-red-500 focus:outline-none"
+                            className="absolute top-1 bg-[#21212180] active:bg-gray-600 active:scale-90 transition-all p-1  rounded-full right-1 text-gray-50 hover:text-white  focus:outline-none"
                             onClick={() => removeImage(index)}
                           >
                             <svg
-                              className="w-5 h-5"
+                              className="lg:w-3 lg:h-3 w-4 h-4"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -178,7 +178,7 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
                           </button>
                         </div>
                       )}
-                      <p className="text-sm">{bytesToMB(file.size)}</p>
+                      <p className="mt-1 text-sm">{bytesToMB(file.size)}</p>
                     </div>
                   ))}
                 </div>
