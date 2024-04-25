@@ -324,7 +324,7 @@ const ImageUploader = () => {
                     </Dialog.Trigger>
                     <Dialog.Portal>
                       <Dialog.Overlay className="bg-blackA6 data-[state=open]:animate-overlayShow fixed inset-0 z-[100000]" />
-                      <Dialog.Content className=" data-[state=open]:animate-contentShow fixed rounded-md top-[50%] left-[50%] md:w-fit w-[90vw] max-h-[80vh] md:max-h-none  translate-x-[-50%] p-5 translate-y-[-50%]  bg-white focus:outline-none">
+                      <Dialog.Content className="z-[100000000] data-[state=open]:animate-contentShow fixed rounded-md top-[50%] left-[50%] md:w-fit w-[90vw] max-h-[80vh] md:max-h-none  translate-x-[-50%] p-5 translate-y-[-50%]  bg-white focus:outline-none">
                         <span className="flex mb-3 items-start justify-center flex-col">
                           <Dialog.Title className="text-mauve12 m-0 text-[17px] font-medium">
                             {dataVal.name.length > 15
