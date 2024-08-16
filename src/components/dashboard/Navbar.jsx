@@ -27,7 +27,7 @@ function Navbar() {
                   open ? 'left-0 z-[-1]' : 'left-[-250px] z-[-1]'
                 }`}
               >
-                <span className="flex py-2 md:py-0 bg-gray-800 items-center justify-start ps-4 w-full gap-3 border-e-2 border-gray-600 h-[10vh]">
+                <span className="flex py-2 md:py-0 bg-gray-800 items-center justify-start ps-4 w-full gap-3 border-e-2 border-gray-600 md:h-[10vh]">
                   <img src={require('../assert/logo.ico')} alt="" className="h-14" />
                   <Link to="/home" className="text-white text-2xl font-bold">
                     Cloud Point
