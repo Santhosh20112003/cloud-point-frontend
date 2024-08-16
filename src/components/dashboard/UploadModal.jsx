@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const UploadModal = ({ handleUpload, bytesToMB }) => {
   const [showModal, setShowModal] = useState(false);
@@ -9,7 +9,7 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         setShowModal(false);
       }
     };
@@ -17,21 +17,21 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
     const handleBeforeUnload = (event) => {
       if (fileon) {
         event.preventDefault();
-        event.returnValue = '';
+        event.returnValue = "";
 
-        const result = window.confirm('Are you sure you want to proceed?');
+        const result = window.confirm("Are you sure you want to proceed?");
         if (result) {
           window.location.reload();
         }
       }
     };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    document.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      document.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [fileon]);
 
@@ -39,7 +39,9 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
     const files = event.target.files;
     const fileArray = Array.from(files);
 
-    const validFiles = fileArray.filter((file) => file.type.startsWith('image/') || file.type.startsWith('video/'));
+    const validFiles = fileArray.filter(
+      (file) => file.type.startsWith("image/") || file.type.startsWith("video/")
+    );
 
     if (validFiles.length > 0) {
       setFileOn(true);
@@ -61,7 +63,9 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
     const files = event.dataTransfer.files;
     const fileArray = Array.from(files);
 
-    const validFiles = fileArray.filter((file) => file.type.startsWith('image/') || file.type.startsWith('video/'));
+    const validFiles = fileArray.filter(
+      (file) => file.type.startsWith("image/") || file.type.startsWith("video/")
+    );
 
     if (validFiles.length > 0) {
       if (selectedFiles.length > 0) {
@@ -109,11 +113,11 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
   return (
     <div className="flex items-center justify-center">
       <button
-        className="px-4 py-2 active:scale-90 transition-all bg-[#00aaff] text-white rounded shadow-lg focus:outline-none hover:bg-[#049ce8]"
+        className="px-4 py-2  active:scale-90 border-2 border-white outline outline-[3px] outline-[#049be7] transition-all bg-[#049be7] text-center text-white rounded-full"
         type="button"
         onClick={() => setShowModal(true)}
       >
-        New
+        Upload File
       </button>
 
       {showModal && (
@@ -133,7 +137,12 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
                     viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </button>
               </div>
@@ -141,9 +150,13 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
                 <div className="flex flex-wrap gap-2 mb-4 overflow-y-auto h-[300px]">
                   {selectedFiles.map((file, index) => (
                     <div key={index} className="flex items-center flex-col ">
-                      {file.type.startsWith('image/') ? (
+                      {file.type.startsWith("image/") ? (
                         <div className="relative">
-                          <img src={previewURLs[index]} alt="Preview" className="max-h-60 rounded" />
+                          <img
+                            src={previewURLs[index]}
+                            alt="Preview"
+                            className="max-h-60 rounded"
+                          />
                           <button
                             className="absolute top-1 bg-[#21212180] active:bg-gray-600 active:scale-90 transition-all p-1  rounded-full right-1 text-gray-50 hover:text-white  focus:outline-none"
                             onClick={() => removeImage(index)}
@@ -155,13 +168,23 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
                               viewBox="0 0 24 24"
                               xmlns="http://www.w3.org/2000/svg"
                             >
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                              />
                             </svg>
                           </button>
                         </div>
                       ) : (
                         <div className="relative">
-                          <video src={previewURLs[index]} alt="Preview" className="max-h-60 rounded" controls />
+                          <video
+                            src={previewURLs[index]}
+                            alt="Preview"
+                            className="max-h-60 rounded"
+                            controls
+                          />
                           <button
                             className="absolute top-1 bg-[#21212180] active:bg-gray-600 active:scale-90 transition-all p-1  rounded-full right-1 text-gray-50 hover:text-white  focus:outline-none"
                             onClick={() => removeImage(index)}
@@ -173,7 +196,12 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
                               viewBox="0 0 24 24"
                               xmlns="http://www.w3.org/2000/svg"
                             >
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                              />
                             </svg>
                           </button>
                         </div>
@@ -194,7 +222,9 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
                       src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png"
                       alt="no data"
                     />
-                    <span className="text-small text-gray-500">Drag and Drop Files here ,browse files</span>
+                    <span className="text-small text-gray-500">
+                      Drag and Drop Files here ,browse files
+                    </span>
                   </div>
                 </div>
               )}
@@ -213,7 +243,11 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
                   Upload
                 </button>
               </form>
-              {err && <span className="text-sm text-red-500">*No files selected or file size exceeds the limit</span>}
+              {err && (
+                <span className="text-sm text-red-500">
+                  *No files selected or file size exceeds the limit
+                </span>
+              )}
             </div>
           </div>
         </div>

@@ -201,13 +201,13 @@ const ImageUploader = () => {
   //   }
   // };
 
-  const share = (name, link) => {
-    console.log(name + " " + link);
+  const share = (dataVal) => {
+    
     if (navigator.share) {
       navigator
         .share({
-          title: name,
-          url: link,
+          title: dataVal.name,
+          url: dataVal.url.replaceAll(" ", "%20"),
         })
         .then(() => {
           console.log("ok");
@@ -330,7 +330,7 @@ const ImageUploader = () => {
                           </li> */}
                           <li className="py-2 px-3 active:bg-gray-100 active:text-gray-500 hover:bg-gray-100 rounded-b-md">
                             <button
-                              onClick={() => share(dataVal.name, dataVal.url)}
+                              onClick={() => share(dataVal)}
                               className="w-full text-left inline-flex items-center gap-2"
                             >
                               <FaRegShareFromSquare /> Share
