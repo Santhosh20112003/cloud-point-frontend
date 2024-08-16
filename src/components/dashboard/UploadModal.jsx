@@ -117,7 +117,7 @@ const UploadModal = ({ handleUpload, bytesToMB }) => {
         type="button"
         onClick={() => setShowModal(true)}
       >
-        Upload File
+        Upload
       </button>
 
       {showModal && (
