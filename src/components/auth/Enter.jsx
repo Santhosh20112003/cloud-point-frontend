@@ -36,7 +36,6 @@ function Login() {
 
     try {
       await GithubSignIn();
-      // toast.success("Authentication Success", { position: "top-right" });
       navigate("/dashboard");
     } catch (err) {
       toast.error(

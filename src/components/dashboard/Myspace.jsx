@@ -7,6 +7,7 @@ import {
   deleteObject,
   getMetadata,
 } from "firebase/storage";
+// import { saveAs } from "file-saver";
 import toast, { Toaster } from "react-hot-toast";
 import * as Dialog from "@radix-ui/react-dialog";
 import { storage } from "../../config/firebase";
@@ -16,6 +17,10 @@ import { useUserAuth } from "../context/UserAuthContext";
 import { MyContext } from "./Structure";
 import { getCurrentTimeInUTCFormat, ParseDate } from "../../common/methods";
 import { useRef } from "react";
+import { FaRegShareFromSquare } from "react-icons/fa6";
+import { IoCopy } from "react-icons/io5";
+import { IoCopyOutline } from "react-icons/io5";
+import { MdDeleteOutline } from "react-icons/md";
 
 const ImageUploader = () => {
   const { calculateTotalFileSize, totalSize, totalSizePercent } =
@@ -153,7 +158,7 @@ const ImageUploader = () => {
       console.error("Error uploading files:", error);
 
       toast.error("An error occurred while uploading the files", {
-         position: "top-center" 
+        position: "top-center",
       });
 
       return false;
@@ -183,6 +188,38 @@ const ImageUploader = () => {
     }, 1000);
   };
 
+  // const DownloadFile = async(link, name) => {
+  //   try {
+  //     console.log(`Downloading file: ${name} from ${link}`);
+  //     var res = await fetch(link);
+  //     var blob = await res.blob();
+  //     saveAs(blob,name);
+  //     console.log("Download successful!");
+  //   } catch (err) {
+  //     console.error("Download failed:", err);
+  //     alert("Download failed. Please try again later.");
+  //   }
+  // };
+
+  const share = (name, link) => {
+    console.log(name + " " + link);
+    if (navigator.share) {
+      navigator
+        .share({
+          title: name,
+          url: link,
+        })
+        .then(() => {
+          console.log("ok");
+        })
+        .catch((err) => {
+          console.error(err);
+          alert(err);
+        });
+    } else {
+      console.log("Doesnt support");
+    }
+  };
 
   const toggleDropdown = (id) => {
     setImgUrl((data) =>
@@ -258,37 +295,56 @@ const ImageUploader = () => {
                         <ul className="origin-top-center absolute right-3 mt-2 w-40 rounded-md shadow-lg z-40 bg-white ring-1 ring-black ring-opacity-5">
                           {copySuccess === dataVal.url ? (
                             <li
-                              className="py-1 px-2 hover:bg-green-200 bg-green-100"
+                              className="py-2 px-3"
                               onClick={() => handleCopy(dataVal)}
                             >
-                              Copied!
+                              <button className="w-full text-left inline-flex items-center gap-2">
+                                <IoCopy /> Copied!
+                              </button>
                             </li>
                           ) : (
                             <li
-                              className="py-1 px-2 hover:bg-gray-100 "
+                              className="py-2 px-3 hover:bg-gray-100 "
                               onClick={() => handleCopy(dataVal)}
                             >
-                              Copy Url
+                              <button className="w-full text-left inline-flex items-center gap-2">
+                                <IoCopyOutline /> Copy Url
+                              </button>
                             </li>
                           )}
-                          <li className="py-1 px-2 lg:block hidden active:bg-gray-100 active:text-gray-500 hover:bg-gray-100 rounded-b-md">
-                            <a
-                              href={dataVal.url}
-                              download={dataVal.name}
+                          {/* <li className="py-1 px-2 lg:block hidden active:bg-gray-100 active:text-gray-500 hover:bg-gray-100 rounded-b-md">
+                            <button
+                              onClick={() =>
+                                DownloadFile(
+                                  dataVal.url,
+                                  `${dataVal.name}.${dataVal.contentType
+                                    .replace("image/", "")
+                                    .replace("video/", "")
+                                    .slice(0, 4)}`
+                                )
+                              }
                               className="w-full text-left"
                             >
                               Download
-                            </a>
+                            </button>
+                          </li> */}
+                          <li className="py-2 px-3 active:bg-gray-100 active:text-gray-500 hover:bg-gray-100 rounded-b-md">
+                            <button
+                              onClick={() => share(dataVal.name, dataVal.url)}
+                              className="w-full text-left inline-flex items-center gap-2"
+                            >
+                              <FaRegShareFromSquare /> Share
+                            </button>
                           </li>
-                          <li className="py-1 px-2 active:bg-red-200 active:text-red-500 hover:bg-gray-100 rounded-b-md">
+                          <li className="py-2 px-3 active:bg-red-200 active:text-red-500 hover:bg-gray-100 rounded-b-md">
                             <button
                               onClick={() => {
                                 handleDelete(dataVal.id, dataVal.url);
                                 toggleDropdown("");
                               }}
-                              className="w-full text-left"
+                              className="w-full text-left inline-flex items-center gap-2"
                             >
-                              Delete
+                              <MdDeleteOutline  /> Delete
                             </button>
                           </li>
                         </ul>
