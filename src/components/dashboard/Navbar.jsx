@@ -14,7 +14,7 @@ function Navbar() {
     <nav className={`bg-gray-800 shadow-xl md:h-[10vh]  ${
       location.pathname.includes('profile') || location.pathname.includes('studio') ? 'md:hidden' : ''
     }`}>
-      <div className="mx-auto px-4 py-2 sm:px-6 lg:px-10">
+      <div className="mx-auto px-4 py-2 md:py-0 sm:px-6 lg:px-10">
         <div className="flex justify-between md:h-[10vh]">
           <div className="flex items-center">
             <span className="flex md:hidden lg:hidden">
@@ -27,7 +27,7 @@ function Navbar() {
                   open ? 'left-0 z-[-1]' : 'left-[-250px] z-[-1]'
                 }`}
               >
-                <span className="flex py-2 bg-gray-800 items-center justify-start ps-4 w-full gap-3 border-e-2 border-gray-600 h-[10vh]">
+                <span className="flex py-2 md:py-0 bg-gray-800 items-center justify-start ps-4 w-full gap-3 border-e-2 border-gray-600 h-[10vh]">
                   <img src={require('../assert/logo.ico')} alt="" className="h-14" />
                   <Link to="/home" className="text-white text-2xl font-bold">
                     Cloud Point
